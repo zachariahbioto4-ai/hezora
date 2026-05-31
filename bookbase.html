@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookBase Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+        }
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        .book-card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="flex h-screen items-center justify-center p-8">
+
+    <!-- Main Container -->
+    <div class="flex h-[90vh] w-full max-w-[1400px] overflow-hidden rounded-3xl bg-white shadow-2xl ring-1 ring-gray-200">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="flex w-64 flex-col border-r border-gray-100 bg-white pt-8 pb-6 pl-8 pr-6 shrink-0">
+            <!-- Logo -->
+            <div class="mb-12 flex items-center gap-3">
+                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+                <h1 class="text-xl font-bold text-gray-900 tracking-tight">BookBase</h1>
+            </div>
+
+            <!-- Main Menu -->
+            <nav class="flex-1 space-y-2">
+                <a href="#" class="flex items-center gap-4 rounded-xl bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-600 transition-colors">
+                    <i class="fa-solid fa-compass w-5 text-center text-lg"></i>
+                    Discover
+                </a>
+                <a href="#" class="group flex items-center gap-4 rounded-xl px-4 py-3 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+                    <i class="fa-solid fa-shapes w-5 text-center text-lg text-gray-400 group-hover:text-gray-600"></i>
+                    Category
+                </a>
+                <a href="#" class="group flex items-center gap-4 rounded-xl px-4 py-3 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+                    <i class="fa-solid fa-book-bookmark w-5 text-center text-lg text-gray-400 group-hover:text-gray-600"></i>
+                    My Library
+                </a>
+                <a href="#" class="group flex items-center gap-4 rounded-xl px-4 py-3 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+                    <i class="fa-solid fa-download w-5 text-center text-lg text-gray-400 group-hover:text-gray-600"></i>
+                    Download
+                </a>
+                <a href="#" class="group flex items-center gap-4 rounded-xl px-4 py-3 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+                    <i class="fa-solid fa-headphones w-5 text-center text-lg text-gray-400 group-hover:text-gray-600"></i>
+                    Audio Books
+                </a>
+                <a href="#" class="group flex items-center gap-4 rounded-xl px-4 py-3 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+                    <i class="fa-regular fa-heart w-5 text-center text-lg text-gray-400 group-hover:text-gray-600"></i>
+                    Favourite
+                </a>
+            </nav>
+
+            <!-- Bottom Menu -->
+            <div class="mt-auto space-y-2 pt-8">
+                <a href="#" class="group flex items-center gap-4 rounded-xl px-4 py-3 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+                    <i class="fa-solid fa-gear w-5 text-center text-lg text-gray-400 group-hover:text-gray-600"></i>
+                    Settings
+                </a>
+                <a href="#" class="group flex items-center gap-4 rounded-xl px-4 py-3 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+                    <i class="fa-regular fa-circle-question w-5 text-center text-lg text-gray-400 group-hover:text-gray-600"></i>
+                    Support
+                </a>
+                <a href="#" class="group flex items-center gap-4 rounded-xl px-4 py-3 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors mt-4">
+                    <i class="fa-solid fa-arrow-right-from-bracket w-5 text-center text-lg text-gray-400 group-hover:text-gray-600"></i>
+                    Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex flex-1 flex-col overflow-hidden bg-[#fafafa]">
+            
+            <!-- Header -->
+            <header class="flex items-center justify-between px-10 py-8">
+                <!-- Search Bar -->
+                <div class="relative w-[400px]">
+                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                        <i class="fa-solid fa-magnifying-glass text-gray-400"></i>
+                    </div>
+                    <input type="text" placeholder="Search your favourite books" class="block w-full rounded-full border-0 bg-white py-3 pl-11 pr-4 text-sm text-gray-900 shadow-sm ring-1 ring-inset ring-gray-100 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600">
+                </div>
+
+                <!-- User Actions -->
+                <div class="flex items-center gap-6">
+                    <!-- Notification -->
+                    <button class="relative text-gray-400 hover:text-gray-600 transition-colors">
+                        <i class="fa-regular fa-bell text-xl"></i>
+                        <span class="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white border-2 border-white">2</span>
+                    </button>
+                    <!-- User Profile Dropdown -->
+                    <div class="flex items-center gap-3 cursor-pointer">
+                        <img src="https://i.pravatar.cc/150?img=11" alt="Balogun" class="h-10 w-10 rounded-full object-cover shadow-sm ring-2 ring-white">
+                        <span class="text-sm font-semibold text-gray-700">Balogun</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-gray-400"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Content -->
+            <div class="flex-1 overflow-y-auto px-10 pb-10">
+                
+                <!-- Recommended Section -->
+                <section class="mb-12">
+                    <div class="mb-6 flex items-center justify-between">
+                        <h2 class="text-xl font-bold text-gray-900">Recommended</h2>
+                        <a href="#" class="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors flex items-center gap-1">
+                            See All <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="grid grid-cols-4 gap-6">
+                        <!-- Book 1 -->
+                        <div class="group cursor-pointer rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100 transition-all book-card-hover">
+                            <div class="aspect-[2/3] w-full overflow-hidden rounded-xl bg-gray-100 mb-4 shadow-inner">
+                                <img src="https://m.media-amazon.com/images/I/71TRUbzcvaL._AC_UF1000,1000_QL80_.jpg" alt="The Psychology of Money" class="h-full w-full object-cover">
+                            </div>
+                            <h3 class="truncate text-sm font-bold text-gray-900 group-hover:text-blue-600 transition-colors">The Psychology of...</h3>
+                            <p class="text-xs text-gray-500 mt-1">Morgan Housel</p>
+                        </div>
+                        
+                        <!-- Book 2 -->
+                        <div class="group cursor-pointer rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100 transition-all book-card-hover">
+                            <div class="aspect-[2/3] w-full overflow-hidden rounded-xl bg-yellow-400 mb-4 shadow-inner flex items-center justify-center p-2">
+                                <img src="https://m.media-amazon.com/images/I/71YyN7kZ1fL._AC_UF1000,1000_QL80_.jpg" alt="How Innovation Works" class="h-full w-full object-contain mix-blend-multiply">
+                            </div>
+                            <h3 class="truncate text-sm font-bold text-gray-900 group-hover:text-blue-600 transition-colors">How Innovation...</h3>
+                            <p class="text-xs text-gray-500 mt-1">Matt Ridley</p>
+                        </div>
+
+                        <!-- Book 3 -->
+                        <div class="group cursor-pointer rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100 transition-all book-card-hover">
+                            <div class="aspect-[2/3] w-full overflow-hidden rounded-xl bg-gray-50 mb-4 shadow-inner">
+                                <img src="https://m.media-amazon.com/images/I/61k7W2m4f+L._AC_UF1000,1000_QL80_.jpg" alt="Company of One" class="h-full w-full object-cover">
+                            </div>
+                            <h3 class="truncate text-sm font-bold text-gray-900 group-hover:text-blue-600 transition-colors">Company of One</h3>
+                            <p class="text-xs text-gray-500 mt-1">Paul Jarvis</p>
+                        </div>
+
+                        <!-- Book 4 -->
+                        <div class="group cursor-pointer rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100 transition-all book-card-hover">
+                            <div class="aspect-[2/3] w-full overflow-hidden rounded-xl bg-[#c59c5d] mb-4 shadow-inner p-1">
+                                <img src="https://m.media-amazon.com/images/I/81B4W13kS8L._AC_UF1000,1000_QL80_.jpg" alt="Stupore E Tremori" class="h-full w-full object-cover rounded-lg">
+                            </div>
+                            <h3 class="truncate text-sm font-bold text-gray-900 group-hover:text-blue-600 transition-colors">Stupore E Tremori</h3>
+                            <p class="text-xs text-gray-500 mt-1">Amélie Nothomb</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Categories Section -->
+                <section>
+                    <div class="mb-6 flex items-center justify-between">
+                        <h2 class="text-xl font-bold text-gray-900">Categories</h2>
+                        <button class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors">
+                            <i class="fa-solid fa-sliders text-sm"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Category Pills -->
+                    <div class="mb-8 flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+                        <button class="whitespace-nowrap rounded-full bg-blue-600 px-5 py-1.5 text-sm font-medium text-white shadow-sm shadow-blue-200 transition-colors">All</button>
+                        <button class="whitespace-nowrap rounded-full bg-white px-5 py-1.5 text-sm font-medium text-gray-600 shadow-sm ring-1 ring-gray-100 hover:bg-gray-50 transition-colors">Sci-Fi</button>
+                        <button class="whitespace-nowrap rounded-full bg-white px-5 py-1.5 text-sm font-medium text-gray-600 shadow-sm ring-1 ring-gray-100 hover:bg-gray-50 transition-colors">Fantasy</button>
+                        <button class="whitespace-nowrap rounded-full bg-white px-5 py-1.5 text-sm font-medium text-gray-600 shadow-sm ring-1 ring-gray-100 hover:bg-gray-50 transition-colors">Drama</button>
+                        <button class="whitespace-nowrap rounded-full bg-white px-5 py-1.5 text-sm font-medium text-gray-600 shadow-sm ring-1 ring-gray-100 hover:bg-gray-50 transition-colors">Business</button>
+                        <button class="whitespace-nowrap rounded-full bg-white px-5 py-1.5 text-sm font-medium text-gray-600 shadow-sm ring-1 ring-gray-100 hover:bg-gray-50 transition-colors">Education</button>
+                        <button class="whitespace-nowrap rounded-full bg-white px-5 py-1.5 text-sm font-medium text-gray-600 shadow-sm ring-1 ring-gray-100 hover:bg-gray-50 transition-colors">Geography</button>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-6 items-end">
+                        <!-- Category Book 1 -->
+                        <div class="group cursor-pointer">
+                            <div class="aspect-[2/3] w-full overflow-hidden rounded-xl bg-gray-900 mb-3 shadow-md transition-transform group-hover:-translate-y-1">
+                                <img src="https://m.media-amazon.com/images/I/81xG-Y3m8sL._AC_UF1000,1000_QL80_.jpg" alt="The Bees" class="h-full w-full object-cover">
+                            </div>
+                            <h3 class="truncate text-sm font-bold text-gray-900">The Bees</h3>
+                            <p class="text-xs text-gray-500 mt-0.5">Laline Paull</p>
+                        </div>
+
+                        <!-- Category Book 2 -->
+                        <div class="group cursor-pointer">
+                            <div class="aspect-[2/3] w-full overflow-hidden rounded-xl bg-gray-100 mb-3 shadow-md transition-transform group-hover:-translate-y-1 p-2">
+                                <img src="https://m.media-amazon.com/images/I/61r-CjL58eL._AC_UF1000,1000_QL80_.jpg" alt="Real Help" class="h-full w-full object-contain mix-blend-multiply">
+                            </div>
+                            <h3 class="truncate text-sm font-bold text-gray-900">Real Help</h3>
+                            <p class="text-xs text-gray-500 mt-0.5">Ayodeji Awosika</p>
+                        </div>
+
+                        <!-- Highlighted Book (Center) -->
+                        <div class="group cursor-pointer relative z-10 -translate-y-4 rounded-2xl bg-white p-4 shadow-xl ring-1 ring-gray-100">
+                             <div class="absolute top-6 left-6 z-20 flex h-6 w-6 items-center justify-center rounded-full bg-black/30 backdrop-blur-sm text-red-500">
+                                <i class="fa-solid fa-heart text-xs"></i>
+                            </div>
+                            <div class="absolute top-6 right-6 z-20 flex items-center gap-1 rounded-full bg-black/60 backdrop-blur-sm px-2 py-0.5 text-xs font-semibold text-white">
+                                <i class="fa-solid fa-star text-yellow-400 text-[10px]"></i> 4.8
+                            </div>
+                            <div class="aspect-[2/3] w-full overflow-hidden rounded-xl bg-red-800 mb-4 shadow-inner">
+                                <img src="https://m.media-amazon.com/images/I/81nC-H8OhmL._AC_UF1000,1000_QL80_.jpg" alt="The Fact of a Body" class="h-full w-full object-cover">
+                            </div>
+                            <h3 class="truncate text-sm font-bold text-gray-900 text-center">The Fact of a Body</h3>
+                        </div>
+
+                        <!-- Category Book 3 -->
+                        <div class="group cursor-pointer">
+                            <div class="aspect-[2/3] w-full overflow-hidden rounded-xl bg-blue-100 mb-3 shadow-md transition-transform group-hover:-translate-y-1">
+                                <img src="https://m.media-amazon.com/images/I/71DXYhJ9bHL._AC_UF1000,1000_QL80_.jpg" alt="The Room" class="h-full w-full object-cover mix-blend-multiply">
+                            </div>
+                            <h3 class="truncate text-sm font-bold text-gray-900">The Room</h3>
+                            <p class="text-xs text-gray-500 mt-0.5">Jonas Karlsson</p>
+                        </div>
+                        
+                         <!-- Category Book 4 (Partial view based on image) -->
+                        <!--
+                        <div class="group cursor-pointer">
+                            <div class="aspect-[2/3] w-full overflow-hidden rounded-xl bg-[#e3cdbe] mb-3 shadow-md transition-transform group-hover:-translate-y-1">
+                                <img src="https://m.media-amazon.com/images/I/71jM-3B7j9L._AC_UF1000,1000_QL80_.jpg" alt="Through the Breaking" class="h-full w-full object-cover">
+                            </div>
+                            <h3 class="truncate text-sm font-bold text-gray-900">Through the...</h3>
+                            <p class="text-xs text-gray-500 mt-0.5">Cate Emond</p>
+                        </div>
+                        -->
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Right Side Panel (Book Details) -->
+        <aside class="w-80 flex-col bg-[#0f172a] text-white shrink-0 hidden lg:flex rounded-l-none rounded-r-3xl">
+            <div class="flex-1 overflow-y-auto px-8 py-12 scrollbar-hide">
+                <!-- Book Cover Large -->
+                <div class="mx-auto w-48 mb-8 rounded-xl bg-white p-2 shadow-2xl shadow-blue-900/50">
+                    <img src="https://m.media-amazon.com/images/I/61k7W2m4f+L._AC_UF1000,1000_QL80_.jpg" alt="Company of One" class="w-full rounded-lg shadow-inner">
+                </div>
+
+                <!-- Book Title & Author -->
+                <div class="text-center mb-6">
+                    <h2 class="text-xl font-bold tracking-tight mb-1">Company of One</h2>
+                    <p class="text-gray-400 text-sm">Paul Jarvis</p>
+                </div>
+
+                <!-- Rating -->
+                <div class="flex items-center justify-center gap-1 mb-8">
+                    <div class="flex text-yellow-400 text-sm gap-0.5">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <span class="text-sm font-semibold ml-2">4.8</span>
+                </div>
+
+                <!-- Stats -->
+                <div class="flex justify-center gap-8 mb-8 border-y border-gray-700/50 py-4">
+                    <div class="text-center">
+                        <div class="text-lg font-bold">320</div>
+                        <div class="text-[10px] text-gray-400 uppercase tracking-wider mt-0.5">Pages</div>
+                    </div>
+                    <div class="text-center border-l border-gray-700/50 pl-8">
+                        <div class="text-lg font-bold">643</div>
+                        <div class="text-[10px] text-gray-400 uppercase tracking-wider mt-0.5">Ratings</div>
+                    </div>
+                    <div class="text-center border-l border-gray-700/50 pl-8">
+                        <div class="text-lg font-bold">110</div>
+                        <div class="text-[10px] text-gray-400 uppercase tracking-wider mt-0.5">Reviews</div>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <p class="text-xs leading-relaxed text-gray-300 text-center mb-10 opacity-80">
+                    Company of One offers a refreshingly original business strategy that's focused on a commitment to being better instead of bigger. Why? Because staying small provides one with the freedom to pursue more meaningful pleasures in life—and avoid the headaches that...
+                </p>
+
+                <!-- Action Button -->
+                <button class="w-full rounded-xl bg-blue-600 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/30 hover:bg-blue-500 transition-colors flex items-center justify-center gap-2">
+                    Read Now <i class="fa-solid fa-book-open-reader"></i>
+                </button>
+            </div>
+        </aside>
+
+    </div>
+
+</body>
+</html>
