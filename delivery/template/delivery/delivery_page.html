@@ -1,0 +1,51 @@
+{% extends "base/base.html" %}
+{% block content %}
+
+<div class="delivery-wrap">
+
+  <div class="confirm-banner">
+    <i class="fa-solid fa-circle-check"></i>
+    <div>
+      <h2>Purchase confirmed!</h2>
+      <p>Order #{{ order.id|truncatechars:8 }}
+         · Paid {{ order.paid_at|date:"d M Y" }}</p>
+    </div>
+  </div>
+
+  {% regroup tokens by book_file.book as book_tokens %}
+  {% for group in book_tokens %}
+
+    <div class="book-card">
+      <img src="{{ group.grouper.cover_image.url }}">
+      <div class="book-info">
+        <h3>{{ group.grouper.title }}</h3>
+
+        <div class="format-links">
+        {% for token in group.list %}
+          {% if token.is_valid %}
+            <a href="{% url 'delivery:download' token.token %}"
+               class="dl-btn">
+              <i class="fa-solid fa-download"></i>
+              {{ token.book_file.get_format_display }}
+              <span>{{ token.book_file.file_size_mb }} MB</span>
+            </a>
+          {% else %}
+            <span class="dl-btn expired">Link expired</span>
+          {% endif %}
+        {% endfor %}
+        </div>
+
+      </div>
+    </div>
+
+  {% endfor %}
+
+  <p class="library-note">
+    All books saved to
+    <a href="{% url 'library:index' %}">My Library</a>
+    — re-download anytime, no expiry.
+  </p>
+
+</div>
+
+{% endblock %}
