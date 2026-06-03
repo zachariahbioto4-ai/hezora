@@ -1,20 +1,19 @@
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Delivery
-from .serializers import DeliverySerializer
+from .models import PurchasedBook, DownloadToken, DownloadLog
+from books.serializers import BookSerializer
 
-class DeliveryViewSet(viewsets.ModelViewSet):
-    serializer_class = DeliverySerializer
+class PurchasedBookViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
+    serializer_class = BookSerializer
+
     def get_queryset(self):
-        return Delivery.objects.filter(order__user=self.request.user)
+        return PurchasedBook.objects.filter(user=self.request.user)
+
     @action(detail=False, methods=['get'])
     def track(self, request):
-        tracking_number = request.query_params.get('tracking_number')
-        if tracking_number:
-            delivery = Delivery.objects.filter(tracking_number=tracking_number).first()
-            if delivery and delivery.order.user == request.user:
-                serializer = self.get_serializer(delivery)
-                return Response(serializer.data)
-        return Response({'error':'Delivery not found'}, status=404)
+        purchases = PurchasedBook.objects.filter(user=request.user)
+        books = [p.book for p in purchases]
+        serializer = BookSerializer(books, many=True)
+        return Response(serializer.data)

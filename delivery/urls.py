@@ -4,5 +4,5 @@ from . import views
 
 app_name = 'delivery'
 router = DefaultRouter()
-router.register(r'deliveries', views.DeliveryViewSet, basename='delivery')
+router.register(r'deliveries', views.PurchasedBookViewSet, basename='delivery')
 urlpatterns = [path('', include(router.urls))]

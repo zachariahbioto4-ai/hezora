@@ -21,3 +21,29 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+from django.http import JsonResponse
+
+def home(request):
+    return JsonResponse({
+        'message': 'Welcome to BookBase API',
+        'endpoints': {
+            'admin': '/admin/',
+            'books': '/api/books/',
+            'accounts': '/api/accounts/',
+            'orders': '/api/orders/',
+            'payments': '/api/payments/',
+            'delivery': '/api/delivery/',
+            'library': '/api/library/',
+        }
+    })
+
+urlpatterns = [path('', home)] + urlpatterns
+
+from django.shortcuts import render
+urlpatterns = [path('auth/', lambda req: render(req, 'auth.html'))] + urlpatterns
+
+from django.shortcuts import render
+urlpatterns = [path('auth/', lambda req: render(req, 'auth.html'))] + urlpatterns
+urlpatterns = [path('book/', lambda req: render(req, 'book_detail.html'))] + urlpatterns
+urlpatterns = [path('library/', lambda req: render(req, 'library.html'))] + urlpatterns

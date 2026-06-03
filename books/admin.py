@@ -1,19 +1,23 @@
 from django.contrib import admin
-from .models import Book, Category, Review
+from .models import Book, Genre, Author, BookFile
 
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'created_at']
+@admin.register(Genre)
+class GenreAdmin(admin.ModelAdmin):
+    list_display = ['name', 'slug']
+    search_fields = ['name']
+
+@admin.register(Author)
+class AuthorAdmin(admin.ModelAdmin):
+    list_display = ['name']
     search_fields = ['name']
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ['title', 'author', 'price', 'stock_quantity', 'rating']
-    list_filter = ['category', 'in_stock', 'created_at']
-    search_fields = ['title', 'author', 'isbn']
+    list_display = ['title', 'price', 'is_published', 'is_featured', 'created_at']
+    list_filter = ['is_published', 'is_featured', 'created_at']
+    search_fields = ['title', 'isbn']
 
-@admin.register(Review)
-class ReviewAdmin(admin.ModelAdmin):
-    list_display = ['book', 'user', 'rating', 'created_at']
-    list_filter = ['rating', 'created_at']
-    search_fields = ['book__title', 'user__username']
+@admin.register(BookFile)
+class BookFileAdmin(admin.ModelAdmin):
+    list_display = ['book', 'format', 'file_size_mb', 'created_at']
+    list_filter = ['format']

@@ -1,3 +1,26 @@
-from django.shortcuts import render
+from rest_framework import viewsets, permissions
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from .models import LibraryEntry
+from books.serializers import BookSerializer
 
-# Create your views here.
+class LibraryViewSet(viewsets.ViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def list(self, request):
+        entries = LibraryEntry.objects.filter(user=request.user).select_related('book')
+        books = [entry.book for entry in entries]
+        serializer = BookSerializer(books, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['post'])
+    def add_book(self, request):
+        book_id = request.data.get('book_id')
+        entry, created = LibraryEntry.objects.get_or_create(user=request.user, book_id=book_id)
+        return Response({'status': 'added' if created else 'already exists'})
+
+    @action(detail=False, methods=['delete'])
+    def remove_book(self, request):
+        book_id = request.data.get('book_id')
+        LibraryEntry.objects.filter(user=request.user, book_id=book_id).delete()
+        return Response({'status': 'removed'})
