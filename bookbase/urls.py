@@ -47,3 +47,10 @@ from django.shortcuts import render
 urlpatterns = [path('auth/', lambda req: render(req, 'auth.html'))] + urlpatterns
 urlpatterns = [path('book/', lambda req: render(req, 'book_detail.html'))] + urlpatterns
 urlpatterns = [path('library/', lambda req: render(req, 'library.html'))] + urlpatterns
+
+from django.shortcuts import render
+urlpatterns = [path('dashboard/', lambda req: render(req, 'dashboard.html'))] + urlpatterns
+urlpatterns = [path('categories/', lambda req: render(req, 'categories.html'))] + urlpatterns
+urlpatterns = [path('orders/', lambda req: render(req, 'orders.html'))] + urlpatterns
+urlpatterns = [path('checkout/', lambda req: render(req, 'checkout.html'))] + urlpatterns
+urlpatterns = [path('profile/', lambda req: render(req, 'profile.html'))] + urlpatterns

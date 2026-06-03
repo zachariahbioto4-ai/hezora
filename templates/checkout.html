@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookBase — Checkout</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',sans-serif;background:#f3f4f6;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1.5rem;}
+    input,select{width:100%;padding:10px 14px;border:1px solid #e2e8f0;border-radius:10px;font-size:13px;color:#374151;outline:none;background:white;}
+    input:focus,select:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,0.08);}
+    label{display:block;font-size:12px;font-weight:500;color:#374151;margin-bottom:6px;}
+    .section-title{font-size:15px;font-weight:700;color:#0f172a;margin-bottom:1rem;}
+    .card-method{border:2px solid #e2e8f0;border-radius:12px;padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;color:#374151;}
+    .card-method.selected{border-color:#2563eb;background:#eff6ff;color:#2563eb;}
+  </style>
+</head>
+<body>
+  <div style="width:100%;max-width:1000px;border-radius:24px;overflow:hidden;background:white;box-shadow:0 20px 60px rgba(0,0,0,0.1);padding:2.5rem;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:2rem;">
+      <a href="/book/" style="font-size:13px;color:#64748b;text-decoration:none;padding:6px 10px;border-radius:8px;background:#f8fafc;">← Back</a>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:28px;height:28px;background:#2563eb;border-radius:7px;display:flex;align-items:center;justify-content:center;">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        </div>
+        <span style="font-size:17px;font-weight:700;color:#0f172a;">BookBase</span>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 340px;gap:2.5rem;">
+      <!-- Left: Form -->
+      <div>
+        <h2 style="font-size:20px;font-weight:700;color:#0f172a;margin-bottom:1.75rem;">Checkout</h2>
+
+        <!-- Shipping -->
+        <div style="margin-bottom:2rem;">
+          <p class="section-title">Shipping Address</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+            <div><label>First Name</label><input type="text" placeholder="John"></div>
+            <div><label>Last Name</label><input type="text" placeholder="Doe"></div>
+          </div>
+          <div style="margin-bottom:12px;"><label>Address</label><input type="text" placeholder="123 Main Street"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+            <div><label>City</label><input type="text" placeholder="Nairobi"></div>
+            <div><label>State</label><input type="text" placeholder="NRB"></div>
+            <div><label>ZIP</label><input type="text" placeholder="00100"></div>
+          </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div style="margin-bottom:2rem;">
+          <p class="section-title">Payment Method</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.25rem;">
+            <div class="card-method selected" onclick="selectMethod(this)">💳 Credit / Debit Card</div>
+            <div class="card-method" onclick="selectMethod(this)">🏦 Bank Transfer</div>
+          </div>
+          <div style="margin-bottom:12px;"><label>Card Number</label><input type="text" placeholder="1234 5678 9012 3456"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div><label>Expiry Date</label><input type="text" placeholder="MM / YY"></div>
+            <div><label>CVV</label><input type="text" placeholder="•••"></div>
+          </div>
+        </div>
+
+        <button style="width:100%;padding:14px;background:#2563eb;color:white;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;">Place Order — $14.99</button>
+        <p style="font-size:11px;color:#94a3b8;text-align:center;margin-top:10px;">🔒 Your payment is secured with 256-bit SSL encryption</p>
+      </div>
+
+      <!-- Right: Order Summary -->
+      <div style="background:#f8fafc;border-radius:18px;padding:1.75rem;">
+        <p class="section-title">Order Summary</p>
+        <div style="display:flex;gap:12px;margin-bottom:1.5rem;">
+          <img src="https://m.media-amazon.com/images/I/61k7W2m4f+L._AC_UF1000,1000_QL80_.jpg" style="width:60px;border-radius:10px;object-fit:cover;">
+          <div>
+            <p style="font-size:13px;font-weight:600;color:#0f172a;">Company of One</p>
+            <p style="font-size:12px;color:#94a3b8;">Paul Jarvis · PDF</p>
+            <p style="font-size:14px;font-weight:700;color:#2563eb;margin-top:4px;">$14.99</p>
+          </div>
+        </div>
+        <div style="border-top:1px solid #e2e8f0;padding-top:1rem;">
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:#64748b;margin-bottom:8px;"><span>Subtotal</span><span>$14.99</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:#64748b;margin-bottom:8px;"><span>Delivery</span><span style="color:#16a34a;">Free</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:#64748b;margin-bottom:1rem;"><span>Tax</span><span>$0.00</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:700;color:#0f172a;padding-top:10px;border-top:1px solid #e2e8f0;"><span>Total</span><span>$14.99</span></div>
+        </div>
+        <div style="background:white;border-radius:12px;padding:12px;margin-top:1.5rem;display:flex;gap:10px;align-items:center;">
+          <input type="text" placeholder="Promo code" style="flex:1;border:none;font-size:13px;outline:none;background:transparent;">
+          <button style="padding:8px 14px;background:#2563eb;color:white;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">Apply</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function selectMethod(el){
+      document.querySelectorAll('.card-method').forEach(x=>x.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+  </script>
+</body>
+</html>
