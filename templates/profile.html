@@ -1,119 +1,320 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BookBase — Profile</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Inter',sans-serif;background:#f3f4f6;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1.5rem;}
-    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:500;color:#64748b;cursor:pointer;margin-bottom:2px;text-decoration:none;}
-    .nav-item:hover{background:#f8fafc;color:#0f172a;}
-    .nav-item.active{background:#eff6ff;color:#2563eb;}
-    .tab-btn{padding:9px 18px;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:#64748b;}
-    .tab-btn.active{background:#eff6ff;color:#2563eb;font-weight:600;}
-    input,textarea,select{width:100%;padding:10px 14px;border:1px solid #e2e8f0;border-radius:10px;font-size:13px;color:#374151;outline:none;background:white;}
-    input:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,0.08);}
-    label{display:block;font-size:12px;font-weight:500;color:#374151;margin-bottom:6px;}
-  </style>
-</head>
-<body>
-  <div style="display:flex;width:100%;max-width:1400px;height:90vh;border-radius:24px;overflow:hidden;background:white;box-shadow:0 20px 60px rgba(0,0,0,0.1);">
-    <aside style="width:220px;background:white;border-right:1px solid #f1f5f9;display:flex;flex-direction:column;padding:1.5rem 1rem;flex-shrink:0;">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:2rem;padding:0 0.5rem;">
-        <div style="width:30px;height:30px;background:#2563eb;border-radius:8px;display:flex;align-items:center;justify-content:center;">
-          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-        </div>
-        <span style="font-size:17px;font-weight:700;color:#0f172a;">BookBase</span>
-      </div>
-      <a href="/dashboard/" class="nav-item">Discover</a>
-      <a href="/categories/" class="nav-item">Category</a>
-      <a href="/library/" class="nav-item">My Library</a>
-      <a href="/orders/" class="nav-item">My Orders</a>
-      <a href="#" class="nav-item">Audio Books</a>
-      <a href="#" class="nav-item">Favourites</a>
-      <div style="margin-top:auto;">
-        <a href="/profile/" class="nav-item active">Settings</a>
-        <a href="/auth/" class="nav-item">Logout</a>
-      </div>
-    </aside>
+{% extends "base.html" %}
 
-    <main style="flex:1;display:flex;flex-direction:column;overflow:hidden;background:#fafafa;">
-      <header style="display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;background:white;border-bottom:1px solid #f1f5f9;flex-shrink:0;">
-        <div>
-          <h1 style="font-size:20px;font-weight:700;color:#0f172a;">Profile & Settings</h1>
-          <p style="font-size:13px;color:#94a3b8;margin-top:2px;">Manage your account details</p>
-        </div>
-      </header>
+{% block title %}BookBase — Profile & Settings{% endblock %}
 
-      <div style="flex:1;overflow-y:auto;padding:2rem;">
-        <!-- Avatar Section -->
-        <div style="display:flex;align-items:center;gap:1.5rem;background:white;border-radius:18px;padding:1.5rem;border:1px solid #f1f5f9;margin-bottom:1.5rem;">
-          <div style="position:relative;">
-            <img src="https://i.pravatar.cc/150?img=11" style="width:72px;height:72px;border-radius:50%;object-fit:cover;">
-            <button style="position:absolute;bottom:0;right:0;width:24px;height:24px;background:#2563eb;border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;">
-              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+{% block nav_profile %}bg-brand-50 text-brand-600 font-semibold{% endblock %}
+
+{% block page_title %}Profile & Settings{% endblock %}
+{% block page_subtitle %}Manage your personal account configuration and secure preferences{% endblock %}
+
+{% block content %}
+<div class="space-y-6 max-w-4xl mx-auto">
+
+    <!-- Section: Avatar Showcase Header -->
+    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row items-center gap-6">
+        <!-- Profile Picture Container -->
+        <div class="relative shrink-0 group">
+            <div class="w-20 h-20 rounded-full overflow-hidden ring-4 ring-brand-100 group-hover:ring-brand-500 transition duration-300">
+                <img src="https://i.pravatar.cc/150?img=11" alt="Avatar" class="w-full h-full object-cover">
+            </div>
+            <!-- Upload Trigger Badge -->
+            <button class="absolute bottom-0 right-0 w-7 h-7 bg-brand-500 hover:bg-brand-600 text-white rounded-full flex items-center justify-center shadow-md border-2 border-white transition duration-150" title="Upload new photo">
+                <i class="fa-solid fa-camera text-[10px]"></i>
             </button>
-          </div>
-          <div>
-            <p style="font-size:16px;font-weight:700;color:#0f172a;">Balogun</p>
-            <p style="font-size:13px;color:#94a3b8;">balogun@example.com · Member since Jan 2024</p>
-          </div>
         </div>
 
-        <!-- Tabs -->
-        <div style="display:flex;gap:4px;background:#f1f5f9;border-radius:12px;padding:4px;margin-bottom:1.5rem;width:fit-content;">
-          <button class="tab-btn active" onclick="switchTab('personal',this)">Personal Info</button>
-          <button class="tab-btn" onclick="switchTab('security',this)">Security</button>
-          <button class="tab-btn" onclick="switchTab('address',this)">Address</button>
+        <!-- Identity Metrics -->
+        <div class="text-center sm:text-left flex-1 min-w-0">
+            <h3 class="text-lg font-black text-slate-900 truncate">
+                {% if user.is_authenticated %}{{ user.username }}{% else %}Balogun{% endif %}
+            </h3>
+            <p class="text-xs text-slate-400 mt-1">
+                {% if user.is_authenticated %}{{ user.email }}{% else %}balogun@example.com{% endif %} &middot; Member since Jan 2024
+            </p>
+            <div class="flex flex-wrap gap-2 justify-center sm:justify-start mt-3">
+                <span class="inline-flex items-center gap-1.5 bg-brand-50 text-brand-700 text-[10px] font-extrabold px-3 py-1 rounded-full border border-brand-100">
+                    <span class="w-1.5 h-1.5 rounded-full bg-brand-500 inline-block"></span> Premium Member
+                </span>
+                <span class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 text-[10px] font-extrabold px-3 py-1 rounded-full border border-emerald-100">
+                    <i class="fa-solid fa-shield-halved text-[9px]"></i> Verified Account
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab Selection Pill Capsule -->
+    <div class="flex bg-slate-100 rounded-full p-1.5 max-w-md">
+        <button id="btn-personal" onclick="switchSettingsTab('personal')" class="tab-btn flex-1 py-2.5 px-4 text-xs font-semibold rounded-full transition-all duration-200 bg-white text-slate-800 shadow-sm">
+            Personal Info
+        </button>
+        <button id="btn-security" onclick="switchSettingsTab('security')" class="tab-btn flex-1 py-2.5 px-4 text-xs font-semibold rounded-full transition-all duration-200 text-slate-500 hover:text-slate-800">
+            Security Settings
+        </button>
+        <button id="btn-address" onclick="switchSettingsTab('address')" class="tab-btn flex-1 py-2.5 px-4 text-xs font-semibold rounded-full transition-all duration-200 text-slate-500 hover:text-slate-800">
+            Delivery Address
+        </button>
+    </div>
+
+    <!-- Segment 1: Personal Info Card -->
+    <div id="tab-personal" class="settings-panel bg-white rounded-2xl border border-slate-200/80 p-6 md:p-8 shadow-sm">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-8 h-8 rounded-lg bg-brand-50 text-brand-500 flex items-center justify-center">
+                <i class="fa-regular fa-user"></i>
+            </div>
+            <h2 class="text-base font-bold text-slate-900 tracking-tight">Personal Details</h2>
         </div>
 
-        <!-- Personal Info Tab -->
-        <div id="tab-personal" style="background:white;border-radius:18px;padding:1.75rem;border:1px solid #f1f5f9;">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
-            <div><label>First Name</label><input type="text" value="Balogun"></div>
-            <div><label>Last Name</label><input type="text" value="Adeyemi"></div>
-          </div>
-          <div style="margin-bottom:1rem;"><label>Email Address</label><input type="email" value="balogun@example.com"></div>
-          <div style="margin-bottom:1rem;"><label>Phone Number</label><input type="tel" value="+234 801 234 5678"></div>
-          <div style="margin-bottom:1rem;"><label>Date of Birth</label><input type="date" value="1995-06-15"></div>
-          <div style="margin-bottom:1.5rem;"><label>Bio</label><textarea rows="3" placeholder="Tell us a little about yourself..."></textarea></div>
-          <button style="padding:11px 24px;background:#2563eb;color:white;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;">Save Changes</button>
+        <form method="POST" action="/profile/update_personal/" class="space-y-4">
+            {% csrf_token %}
+            
+            <!-- Dual Column Fields -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">First Name</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                            <i class="fa-regular fa-user"></i>
+                        </span>
+                        <input type="text" name="first_name" value="Balogun" required 
+                            class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">Last Name</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                            <i class="fa-regular fa-user"></i>
+                        </span>
+                        <input type="text" name="last_name" value="Adeyemi" required 
+                            class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Address Input -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">Email address</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                        <i class="fa-regular fa-envelope"></i>
+                    </span>
+                    <input type="email" name="email" value="{% if user.is_authenticated %}{{ user.email }}{% else %}balogun@example.com{% endif %}" required 
+                        class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                </div>
+            </div>
+
+            <!-- Phone / Date of Birth -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">Phone Number</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-phone-flip text-xs"></i>
+                        </span>
+                        <input type="tel" name="phone" value="+234 801 234 5678" 
+                            class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">Date of Birth</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                            <i class="fa-regular fa-calendar"></i>
+                        </span>
+                        <input type="date" name="date_of_birth" value="1995-06-15" 
+                            class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Bio Textarea -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">About Me / Bio</label>
+                <textarea name="bio" rows="4" placeholder="Tell us a little about your favorite genres, writers, or yourself..." 
+                    class="w-full p-4 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner resize-none">I love business development strategies, historical perspectives, and sci-fi books.</textarea>
+            </div>
+
+            <!-- Save Trigger -->
+            <div class="pt-2 flex justify-start">
+                <button type="submit" class="bg-brand-500 hover:bg-brand-600 text-white font-bold py-3 px-6 rounded-xl shadow-md shadow-brand-500/20 transition duration-150 text-xs flex items-center gap-1.5">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    <span>Save Changes</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Segment 2: Security Credentials Panel (Hidden) -->
+    <div id="tab-security" class="settings-panel hidden bg-white rounded-2xl border border-slate-200/80 p-6 md:p-8 shadow-sm">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-8 h-8 rounded-lg bg-brand-50 text-brand-500 flex items-center justify-center">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h2 class="text-base font-bold text-slate-900 tracking-tight">Security Credentials</h2>
         </div>
 
-        <!-- Security Tab (hidden) -->
-        <div id="tab-security" style="display:none;background:white;border-radius:18px;padding:1.75rem;border:1px solid #f1f5f9;">
-          <div style="margin-bottom:1rem;"><label>Current Password</label><input type="password" placeholder="••••••••"></div>
-          <div style="margin-bottom:1rem;"><label>New Password</label><input type="password" placeholder="Min. 8 characters"></div>
-          <div style="margin-bottom:1.5rem;"><label>Confirm New Password</label><input type="password" placeholder="Repeat new password"></div>
-          <button style="padding:11px 24px;background:#2563eb;color:white;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;">Update Password</button>
+        <form method="POST" action="/profile/update_security/" class="space-y-4">
+            {% csrf_token %}
+
+            <!-- Inputs Grid layout -->
+            <div class="space-y-4 max-w-xl">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">Current Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        <input type="password" name="current_password" placeholder="••••••••" required 
+                            class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">New Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-lock-open"></i>
+                        </span>
+                        <input type="password" name="new_password" placeholder="Minimum 8 characters" required 
+                            class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">Confirm New Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-check-double text-xs"></i>
+                        </span>
+                        <input type="password" name="confirm_password" placeholder="Repeat new password" required 
+                            class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Action -->
+            <div class="pt-4 flex justify-start">
+                <button type="submit" class="bg-brand-500 hover:bg-brand-600 text-white font-bold py-3 px-6 rounded-xl shadow-md shadow-brand-500/20 transition duration-150 text-xs flex items-center gap-1.5">
+                    <i class="fa-solid fa-key text-[10px]"></i>
+                    <span>Update Password</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Segment 3: Delivery / Billing Address Card (Hidden) -->
+    <div id="tab-address" class="settings-panel hidden bg-white rounded-2xl border border-slate-200/80 p-6 md:p-8 shadow-sm">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-8 h-8 rounded-lg bg-brand-50 text-brand-500 flex items-center justify-center">
+                <i class="fa-solid fa-map-location-dot"></i>
+            </div>
+            <h2 class="text-base font-bold text-slate-900 tracking-tight">Delivery & Billing Address</h2>
         </div>
 
-        <!-- Address Tab (hidden) -->
-        <div id="tab-address" style="display:none;background:white;border-radius:18px;padding:1.75rem;border:1px solid #f1f5f9;">
-          <div style="margin-bottom:1rem;"><label>Street Address</label><input type="text" placeholder="123 Main Street"></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
-            <div><label>City</label><input type="text" placeholder="Nairobi"></div>
-            <div><label>State / Province</label><input type="text" placeholder="Nairobi County"></div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
-            <div><label>ZIP / Postal Code</label><input type="text" placeholder="00100"></div>
-            <div><label>Country</label><input type="text" placeholder="Kenya"></div>
-          </div>
-          <button style="padding:11px 24px;background:#2563eb;color:white;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;">Save Address</button>
-        </div>
-      </div>
-    </main>
-  </div>
-  <script>
-    function switchTab(name, btn) {
-      ['personal','security','address'].forEach(t => {
-        document.getElementById('tab-'+t).style.display = t===name ? 'block' : 'none';
-      });
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+        <form method="POST" action="/profile/update_address/" class="space-y-4">
+            {% csrf_token %}
+
+            <div class="space-y-4">
+                <!-- Street -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">Street Address</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-house"></i>
+                        </span>
+                        <input type="text" name="street_address" placeholder="123 Main Street" required 
+                            class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                    </div>
+                </div>
+
+                <!-- City / State -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">City</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-city text-xs"></i>
+                            </span>
+                            <input type="text" name="city" placeholder="Nairobi" required 
+                                class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">State / Province</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-map-pin text-xs"></i>
+                            </span>
+                            <input type="text" name="state" placeholder="Nairobi County" required 
+                                class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Zip / Country -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">ZIP / Postal Code</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-barcode text-[10px]"></i>
+                            </span>
+                            <input type="text" name="zip_code" placeholder="00100" required 
+                                class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">Country</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-globe text-xs"></i>
+                            </span>
+                            <input type="text" name="country" placeholder="Kenya" required 
+                                class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Save Address Action -->
+            <div class="pt-4 flex justify-start">
+                <button type="submit" class="bg-brand-500 hover:bg-brand-600 text-white font-bold py-3 px-6 rounded-xl shadow-md shadow-brand-500/20 transition duration-150 text-xs flex items-center gap-1.5">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span>Save Address Configuration</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function switchSettingsTab(name) {
+        // Hide all segments first
+        const panels = document.querySelectorAll('.settings-panel');
+        panels.forEach(panel => {
+            panel.classList.add('hidden');
+        });
+
+        // Display current active target panel
+        const activePanel = document.getElementById('tab-' + name);
+        if (activePanel) {
+            activePanel.classList.remove('hidden');
+        }
+
+        // Deactivate all selection buttons
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        tabBtns.forEach(btn => {
+            btn.className = "tab-btn flex-1 py-2.5 px-4 text-xs font-semibold rounded-full transition-all duration-200 text-slate-500 hover:text-slate-800";
+        });
+
+        // Apply active capsule styling state to target button
+        const activeBtn = document.getElementById('btn-' + name);
+        if (activeBtn) {
+            activeBtn.className = "tab-btn flex-1 py-2.5 px-4 text-xs font-semibold rounded-full transition-all duration-200 bg-white text-slate-800 shadow-sm";
+        }
     }
-  </script>
-</body>
-</html>
+</script>
+{% endblock %}

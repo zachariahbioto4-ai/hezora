@@ -1,74 +1,198 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full bg-slate-50">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}BookBase{% endblock %}</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Inter',sans-serif;}
-    ::-webkit-scrollbar{width:6px;height:6px;}
-    ::-webkit-scrollbar-track{background:transparent;}
-    ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px;}
-    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:500;color:#64748b;cursor:pointer;margin-bottom:2px;text-decoration:none;}
-    .nav-item:hover{background:#f8fafc;color:#0f172a;}
-    .nav-item.active{background:#eff6ff;color:#2563eb;}
-    {% block extra_style %}{% endblock %}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BookBase{% endblock %}</title>
+    <!-- Tailwind CSS Engine -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f5ff',
+                            100: '#e0ebff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        {% block extra_style %}{% endblock %}
+    </style>
 </head>
-<body style="background:#f3f4f6;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1.5rem;">
+<body class="h-full font-sans antialiased text-slate-800 bg-slate-100 flex flex-col overflow-hidden">
 
-  <div style="display:flex;width:100%;max-width:1400px;height:90vh;border-radius:24px;overflow:hidden;background:white;box-shadow:0 20px 60px rgba(0,0,0,0.1);">
-
-    {% block no_sidebar %}
-    <aside style="width:220px;background:white;border-right:1px solid #f1f5f9;display:flex;flex-direction:column;padding:1.5rem 1rem;flex-shrink:0;">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:2rem;padding:0 0.5rem;">
-        <div style="width:30px;height:30px;background:#2563eb;border-radius:8px;display:flex;align-items:center;justify-content:center;">
-          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+    <!-- Top Mobile Navigation Bar (visible only on mobile) -->
+    <header class="flex lg:hidden items-center justify-between bg-white border-b border-slate-200 px-4 py-3 shadow-sm shrink-0">
+        <div class="flex items-center space-x-2">
+            <div class="p-2 bg-brand-500 rounded-lg text-white">
+                <i class="fa-solid fa-book-open"></i>
+            </div>
+            <span class="font-bold text-lg tracking-tight">BookBase</span>
         </div>
-        <span style="font-size:17px;font-weight:700;color:#0f172a;">BookBase</span>
-      </div>
-      <a href="/" class="nav-item {% block nav_discover %}{% endblock %}"><i class="fa-solid fa-compass"></i> Discover</a>
-      <a href="/categories/" class="nav-item {% block nav_categories %}{% endblock %}"><i class="fa-solid fa-shapes"></i> Category</a>
-      <a href="/library/" class="nav-item {% block nav_library %}{% endblock %}"><i class="fa-solid fa-book-bookmark"></i> My Library</a>
-      <a href="/orders/" class="nav-item {% block nav_orders %}{% endblock %}"><i class="fa-solid fa-bag-shopping"></i> My Orders</a>
-      <a href="#" class="nav-item"><i class="fa-solid fa-headphones"></i> Audio Books</a>
-      <a href="#" class="nav-item"><i class="fa-regular fa-heart"></i> Favourites</a>
-      <div style="margin-top:auto;">
-        <a href="/profile/" class="nav-item {% block nav_profile %}{% endblock %}"><i class="fa-solid fa-gear"></i> Settings</a>
-        <a href="/auth/" class="nav-item" style="color:#ef4444;"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
-      </div>
-    </aside>
-    {% endblock %}
-
-    <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;background:#fafafa;">
-      {% block header %}
-      <header style="display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;background:white;border-bottom:1px solid #f1f5f9;flex-shrink:0;">
-        <div>
-          <h1 style="font-size:20px;font-weight:700;color:#0f172a;">{% block page_title %}BookBase{% endblock %}</h1>
-          <p style="font-size:13px;color:#94a3b8;margin-top:2px;">{% block page_subtitle %}{% endblock %}</p>
+        <div class="flex items-center space-x-4">
+            <button id="mobileMenuBtn" class="text-slate-600 focus:outline-none p-2 rounded-lg hover:bg-slate-50 transition">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
         </div>
-        <div style="display:flex;align-items:center;gap:12px;">
-          {% block header_actions %}{% endblock %}
-          <img src="https://i.pravatar.cc/150?img=11" style="width:34px;height:34px;border-radius:50%;object-fit:cover;">
-          <span style="font-size:13px;font-weight:600;color:#374151;">
-            {% if user.is_authenticated %}{{ user.username }}{% else %}Guest{% endif %}
-          </span>
-        </div>
-      </header>
-      {% endblock %}
+    </header>
 
-      <div style="flex:1;overflow-y:auto;padding:1.5rem 2rem;">
-        {% block content %}{% endblock %}
-      </div>
+    <!-- Outer Frame Layout -->
+    <div class="flex flex-1 overflow-hidden relative">
+        
+        <!-- Sidebar Navigation Drawer -->
+        {% block no_sidebar %}
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-slate-200 flex flex-col justify-between transform -translate-x-full transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 shrink-0">
+            <div>
+                <!-- Brand Identity Header (Visible on Desktop only) -->
+                <div class="hidden lg:flex items-center space-x-3 px-6 py-6 border-b border-slate-100">
+                    <div class="p-2 bg-brand-500 rounded-lg text-white shadow-md shadow-brand-500/20">
+                        <i class="fa-solid fa-book-open text-base"></i>
+                    </div>
+                    <span class="font-extrabold text-xl tracking-tight text-slate-900">BookBase</span>
+                </div>
+
+                <!-- Navigation List -->
+                <nav class="px-4 py-6 space-y-1.5">
+                    <a href="/" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-200 {% block nav_discover %}text-slate-600 hover:bg-slate-50 hover:text-slate-900{% endblock %}">
+                        <i class="fa-solid fa-compass text-lg"></i>
+                        <span>Discover</span>
+                    </a>
+                    <a href="/categories/" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-200 {% block nav_categories %}text-slate-600 hover:bg-slate-50 hover:text-slate-900{% endblock %}">
+                        <i class="fa-solid fa-table-cells-large text-lg"></i>
+                        <span>Category</span>
+                    </a>
+                    <a href="/library/" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-200 {% block nav_library %}text-slate-600 hover:bg-slate-50 hover:text-slate-900{% endblock %}">
+                        <i class="fa-solid fa-book-bookmark text-lg"></i>
+                        <span>My Library</span>
+                    </a>
+                    <a href="/orders/" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-200 {% block nav_orders %}text-slate-600 hover:bg-slate-50 hover:text-slate-900{% endblock %}">
+                        <i class="fa-solid fa-bag-shopping text-lg"></i>
+                        <span>My Orders</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition duration-200">
+                        <i class="fa-solid fa-headphones text-lg"></i>
+                        <span>Audio Books</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition duration-200">
+                        <i class="fa-solid fa-heart text-lg"></i>
+                        <span>Favourites</span>
+                    </a>
+
+                    <div class="h-px bg-slate-200 my-6"></div>
+
+                    <a href="/profile/" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-200 {% block nav_profile %}text-slate-600 hover:bg-slate-50 hover:text-slate-900{% endblock %}">
+                        <i class="fa-solid fa-gear text-lg"></i>
+                        <span>Settings</span>
+                    </a>
+                    <a href="/auth/" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 hover:text-red-700 transition duration-200">
+                        <i class="fa-solid fa-arrow-right-from-bracket text-lg"></i>
+                        <span>Logout</span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Profile Info Footer -->
+            <div class="p-4 border-t border-slate-200">
+                <div class="flex items-center space-x-3 p-2 rounded-xl bg-slate-50">
+                    <img src="https://i.pravatar.cc/150?img=11" alt="Avatar" class="w-10 h-10 rounded-full object-cover ring-2 ring-brand-500">
+                    <div class="flex-1 overflow-hidden">
+                        <p class="font-bold text-xs text-slate-900 truncate">
+                            {% if user.is_authenticated %}{{ user.username }}{% else %}Guest Profile{% endif %}
+                        </p>
+                        <p class="text-[10px] text-slate-500 truncate">
+                            {% if user.is_authenticated %}{{ user.email }}{% else %}Ready to read{% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        {% endblock %}
+
+        <!-- Main Workspace content wrapper -->
+        <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
+            
+            <!-- Feed Center Column -->
+            <div class="flex-1 flex flex-col overflow-hidden bg-slate-50">
+                
+                <!-- Universal Page Header -->
+                {% block header %}
+                <header class="flex items-center justify-between px-6 py-5 bg-white border-b border-slate-200/80 shadow-sm shrink-0">
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-900 tracking-tight">{% block page_title %}BookBase{% endblock %}</h1>
+                        <p class="text-xs text-slate-500 mt-1 font-medium">{% block page_subtitle %}{% endblock %}</p>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        {% block header_actions %}{% endblock %}
+                        
+                        <!-- Account Status Badge -->
+                        <div class="flex items-center gap-2.5 bg-slate-50 pl-2.5 pr-3.5 py-1.5 rounded-full border border-slate-200/60 shadow-sm">
+                            <img src="https://i.pravatar.cc/150?img=11" alt="User Profile" class="w-6 h-6 rounded-full object-cover border border-slate-200">
+                            <span class="text-xs font-bold text-slate-700">
+                                {% if user.is_authenticated %}{{ user.username }}{% else %}Guest{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </header>
+                {% endblock %}
+
+                <!-- Main dynamic content inject container -->
+                <div class="flex-1 overflow-y-auto p-6 custom-scrollbar">
+                    {% block content %}{% endblock %}
+                </div>
+
+            </div>
+
+            <!-- Optional Right Sidebar Panel (Details sidebar override) -->
+            {% block right_panel %}{% endblock %}
+
+        </main>
     </div>
 
-    {% block right_panel %}{% endblock %}
+    <!-- Interface Controller Scripts (Mobile drawer interactions) -->
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 
-  </div>
+        if (mobileMenuBtn && sidebar) {
+            mobileMenuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                sidebar.classList.toggle('-translate-x-full');
+            });
+        }
 
-  {% block scripts %}{% endblock %}
+        // Tap outside drawer overlay to auto-collapse
+        document.addEventListener('click', (e) => {
+            if (sidebar && !sidebar.contains(e.target) && e.target !== mobileMenuBtn) {
+                sidebar.classList.add('-translate-x-full');
+            }
+        });
+    </script>
+
+    {% block scripts %}{% endblock %}
 </body>
 </html>

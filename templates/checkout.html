@@ -1,100 +1,287 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BookBase — Checkout</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Inter',sans-serif;background:#f3f4f6;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1.5rem;}
-    input,select{width:100%;padding:10px 14px;border:1px solid #e2e8f0;border-radius:10px;font-size:13px;color:#374151;outline:none;background:white;}
-    input:focus,select:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,0.08);}
-    label{display:block;font-size:12px;font-weight:500;color:#374151;margin-bottom:6px;}
-    .section-title{font-size:15px;font-weight:700;color:#0f172a;margin-bottom:1rem;}
-    .card-method{border:2px solid #e2e8f0;border-radius:12px;padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;color:#374151;}
-    .card-method.selected{border-color:#2563eb;background:#eff6ff;color:#2563eb;}
-  </style>
-</head>
-<body>
-  <div style="width:100%;max-width:1000px;border-radius:24px;overflow:hidden;background:white;box-shadow:0 20px 60px rgba(0,0,0,0.1);padding:2.5rem;">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:2rem;">
-      <a href="/book/" style="font-size:13px;color:#64748b;text-decoration:none;padding:6px 10px;border-radius:8px;background:#f8fafc;">← Back</a>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <div style="width:28px;height:28px;background:#2563eb;border-radius:7px;display:flex;align-items:center;justify-content:center;">
-          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+{% extends "base.html" %}
+
+{% block title %}BookBase — Secure Checkout{% endblock %}
+
+{% block nav_orders %}bg-brand-50 text-brand-600 font-semibold{% endblock %}
+
+{% block page_title %}Secure Checkout{% endblock %}
+{% block page_subtitle %}Review your item and complete your purchase securely{% endblock %}
+
+{% block header_actions %}
+<a href="/library/" class="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-50 border border-slate-200 hover:bg-slate-100 rounded-xl transition duration-150">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Back to Library</span>
+</a>
+{% endblock %}
+
+{% block content %}
+<form method="POST" action="/checkout/place_order/" class="space-y-8 max-w-3xl">
+    {% csrf_token %}
+    <input type="hidden" name="book_id" value="{{ book.id|default:'1' }}">
+    <input type="hidden" id="selected-payment-method" name="payment_method" value="card">
+
+    <!-- Section 1: Shipping / Billing Address -->
+    <div class="bg-white rounded-2xl border border-slate-200/80 p-6 md:p-8 shadow-sm">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-8 h-8 rounded-lg bg-brand-50 text-brand-500 flex items-center justify-center">
+                <i class="fa-solid fa-truck-fast"></i>
+            </div>
+            <h2 class="text-base font-bold text-slate-900 tracking-tight">Billing & Shipping Details</h2>
         </div>
-        <span style="font-size:17px;font-weight:700;color:#0f172a;">BookBase</span>
-      </div>
+
+        <div class="space-y-4">
+            <!-- Full Name Fields -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">First Name</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                            <i class="fa-regular fa-user"></i>
+                        </span>
+                        <input type="text" name="first_name" placeholder="John" required 
+                            class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">Last Name</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                            <i class="fa-regular fa-user"></i>
+                        </span>
+                        <input type="text" name="last_name" placeholder="Doe" required 
+                            class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Full Address -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">Address</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                        <i class="fa-solid fa-house"></i>
+                    </span>
+                    <input type="text" name="address" placeholder="123 Main Street" required 
+                        class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                </div>
+            </div>
+
+            <!-- City State Zip Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">City</label>
+                    <input type="text" name="city" placeholder="Nairobi" required 
+                        class="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">State / Province</label>
+                    <input type="text" name="state" placeholder="NRB" required 
+                        class="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">ZIP / Postal Code</label>
+                    <input type="text" name="zip" placeholder="00100" required 
+                        class="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 340px;gap:2.5rem;">
-      <!-- Left: Form -->
-      <div>
-        <h2 style="font-size:20px;font-weight:700;color:#0f172a;margin-bottom:1.75rem;">Checkout</h2>
-
-        <!-- Shipping -->
-        <div style="margin-bottom:2rem;">
-          <p class="section-title">Shipping Address</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
-            <div><label>First Name</label><input type="text" placeholder="John"></div>
-            <div><label>Last Name</label><input type="text" placeholder="Doe"></div>
-          </div>
-          <div style="margin-bottom:12px;"><label>Address</label><input type="text" placeholder="123 Main Street"></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
-            <div><label>City</label><input type="text" placeholder="Nairobi"></div>
-            <div><label>State</label><input type="text" placeholder="NRB"></div>
-            <div><label>ZIP</label><input type="text" placeholder="00100"></div>
-          </div>
+    <!-- Section 2: Payment Selector -->
+    <div class="bg-white rounded-2xl border border-slate-200/80 p-6 md:p-8 shadow-sm">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-8 h-8 rounded-lg bg-brand-50 text-brand-500 flex items-center justify-center">
+                <i class="fa-solid fa-credit-card"></i>
+            </div>
+            <h2 class="text-base font-bold text-slate-900 tracking-tight">Payment Details</h2>
         </div>
 
-        <!-- Payment Method -->
-        <div style="margin-bottom:2rem;">
-          <p class="section-title">Payment Method</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.25rem;">
-            <div class="card-method selected" onclick="selectMethod(this)">💳 Credit / Debit Card</div>
-            <div class="card-method" onclick="selectMethod(this)">🏦 Bank Transfer</div>
-          </div>
-          <div style="margin-bottom:12px;"><label>Card Number</label><input type="text" placeholder="1234 5678 9012 3456"></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-            <div><label>Expiry Date</label><input type="text" placeholder="MM / YY"></div>
-            <div><label>CVV</label><input type="text" placeholder="•••"></div>
-          </div>
+        <!-- Choice Panels -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            <button type="button" onclick="selectPaymentMethod('card')" id="method-card" 
+                class="flex items-center justify-between p-4 rounded-xl border-2 border-brand-500 bg-brand-50/50 text-brand-600 transition duration-150 text-left">
+                <span class="flex items-center gap-3 font-semibold text-xs text-slate-800">
+                    <i class="fa-solid fa-credit-card text-brand-500 text-lg"></i>
+                    Credit / Debit Card
+                </span>
+                <i class="fa-solid fa-circle-check text-brand-500 text-sm" id="check-card"></i>
+            </button>
+            <button type="button" onclick="selectPaymentMethod('bank')" id="method-bank" 
+                class="flex items-center justify-between p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition duration-150 text-left">
+                <span class="flex items-center gap-3 font-semibold text-xs text-slate-600">
+                    <i class="fa-solid fa-building-columns text-slate-400 text-lg"></i>
+                    Bank Transfer
+                </span>
+                <i class="fa-solid fa-circle text-slate-200 text-sm hidden" id="check-bank"></i>
+            </button>
         </div>
 
-        <button style="width:100%;padding:14px;background:#2563eb;color:white;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;">Place Order — $14.99</button>
-        <p style="font-size:11px;color:#94a3b8;text-align:center;margin-top:10px;">🔒 Your payment is secured with 256-bit SSL encryption</p>
-      </div>
+        <!-- Card Specific Details Input Grid -->
+        <div id="card-fields-container" class="space-y-4">
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">Card Number</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                        <i class="fa-regular fa-credit-card"></i>
+                    </span>
+                    <input type="text" name="card_number" placeholder="1234 5678 9012 3456" 
+                        class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                </div>
+            </div>
 
-      <!-- Right: Order Summary -->
-      <div style="background:#f8fafc;border-radius:18px;padding:1.75rem;">
-        <p class="section-title">Order Summary</p>
-        <div style="display:flex;gap:12px;margin-bottom:1.5rem;">
-          <img src="https://m.media-amazon.com/images/I/61k7W2m4f+L._AC_UF1000,1000_QL80_.jpg" style="width:60px;border-radius:10px;object-fit:cover;">
-          <div>
-            <p style="font-size:13px;font-weight:600;color:#0f172a;">Company of One</p>
-            <p style="font-size:12px;color:#94a3b8;">Paul Jarvis · PDF</p>
-            <p style="font-size:14px;font-weight:700;color:#2563eb;margin-top:4px;">$14.99</p>
-          </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">Expiry Date</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                            <i class="fa-regular fa-calendar"></i>
+                        </span>
+                        <input type="text" name="expiry" placeholder="MM / YY" 
+                            class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5 ml-1">CVV Security Code</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </span>
+                        <input type="password" name="cvv" placeholder="•••" 
+                            class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-900 shadow-inner">
+                    </div>
+                </div>
+            </div>
         </div>
-        <div style="border-top:1px solid #e2e8f0;padding-top:1rem;">
-          <div style="display:flex;justify-content:space-between;font-size:13px;color:#64748b;margin-bottom:8px;"><span>Subtotal</span><span>$14.99</span></div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;color:#64748b;margin-bottom:8px;"><span>Delivery</span><span style="color:#16a34a;">Free</span></div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;color:#64748b;margin-bottom:1rem;"><span>Tax</span><span>$0.00</span></div>
-          <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:700;color:#0f172a;padding-top:10px;border-top:1px solid #e2e8f0;"><span>Total</span><span>$14.99</span></div>
+
+        <!-- Bank Instructions Container (displayed only when banking selected) -->
+        <div id="bank-instructions-container" class="hidden p-5 rounded-2xl bg-amber-50/50 border border-amber-100/80 text-xs text-slate-600 space-y-3 leading-relaxed">
+            <div class="flex items-center gap-2 text-amber-700 font-bold">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Bank Transfer Instructions</span>
+            </div>
+            <p>Please transfer the total amount of <strong class="text-slate-900">${{ book.price|default:"14.99" }}</strong> to the following corporate account details. Once verified, your books will be unlocked in your account instantly.</p>
+            <div class="grid grid-cols-2 gap-y-2 pt-2 border-t border-amber-100 max-w-sm">
+                <span class="text-slate-500">Bank Name:</span><span class="font-bold text-slate-800">Chase Bank PLC</span>
+                <span class="text-slate-500">Account Name:</span><span class="font-bold text-slate-800">BookBase Ltd</span>
+                <span class="text-slate-500">Account Number:</span><span class="font-bold text-slate-800">9876 5432 10</span>
+                <span class="text-slate-500">Routing Code:</span><span class="font-bold text-slate-800">021000021</span>
+            </div>
         </div>
-        <div style="background:white;border-radius:12px;padding:12px;margin-top:1.5rem;display:flex;gap:10px;align-items:center;">
-          <input type="text" placeholder="Promo code" style="flex:1;border:none;font-size:13px;outline:none;background:transparent;">
-          <button style="padding:8px 14px;background:#2563eb;color:white;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">Apply</button>
-        </div>
-      </div>
     </div>
-  </div>
-  <script>
-    function selectMethod(el){
-      document.querySelectorAll('.card-method').forEach(x=>x.classList.remove('selected'));
-      el.classList.add('selected');
+</form>
+{% endblock %}
+
+{% block right_panel %}
+<!-- Right Order Details Panel -->
+<aside class="w-full md:w-80 bg-[#0e1d3e] text-white flex flex-col justify-between shrink-0 border-l border-slate-800">
+    <div class="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-6">
+        
+        <!-- Cart Items List Header -->
+        <div class="border-b border-slate-800 pb-4">
+            <h3 class="text-sm font-extrabold tracking-wider uppercase text-slate-400">Order Summary</h3>
+        </div>
+
+        <!-- Book Display Card -->
+        <div class="flex gap-4">
+            <div class="w-20 aspect-[3/4] bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-xl p-2.5 shadow-2xl flex items-center justify-center relative overflow-hidden shrink-0">
+                <div class="absolute inset-0 bg-white opacity-5 mix-blend-overlay"></div>
+                <img src="{{ book.cover_url|default:'https://m.media-amazon.com/images/I/61k7W2m4f+L._AC_UF1000,1000_QL80_.jpg' }}" alt="Book Cover" class="h-full object-cover rounded shadow-lg">
+            </div>
+            <div class="flex-1 min-w-0">
+                <h4 class="font-bold text-white text-xs leading-snug truncate">{{ book.title|default:"Company of One" }}</h4>
+                <p class="text-[10px] text-slate-400 mt-1 truncate">by {{ book.author|default:"Paul Jarvis" }}</p>
+                <span class="inline-block bg-slate-800 border border-slate-700/60 text-[9px] text-brand-100 font-semibold px-2 py-0.5 rounded-full mt-2">
+                    Digital Edition · PDF
+                </span>
+            </div>
+        </div>
+
+        <!-- Totals Pricing Block -->
+        <div class="space-y-3 pt-4 border-t border-slate-800">
+            <div class="flex justify-between text-xs text-slate-400">
+                <span>Subtotal</span>
+                <span class="font-bold text-white">${{ book.price|default:"14.99" }}</span>
+            </div>
+            <div class="flex justify-between text-xs text-slate-400">
+                <span>Shipping Delivery</span>
+                <span class="font-bold text-emerald-400">Free Download</span>
+            </div>
+            <div class="flex justify-between text-xs text-slate-400">
+                <span>Taxes & Fees</span>
+                <span class="font-bold text-white">$0.00</span>
+            </div>
+            <div class="pt-3 border-t border-dashed border-slate-800 flex justify-between items-center">
+                <span class="text-xs font-bold text-slate-300">Total Price</span>
+                <span class="text-xl font-extrabold text-white">${{ book.price|default:"14.99" }}</span>
+            </div>
+        </div>
+
+        <!-- Coupon code wrapper -->
+        <div class="bg-[#0a152e] rounded-xl p-3 border border-slate-800 flex gap-2 items-center">
+            <input type="text" placeholder="PROMOCODE" class="flex-1 bg-transparent text-xs text-white border-none focus:outline-none placeholder-slate-500 tracking-wider">
+            <button type="button" class="bg-brand-500 hover:bg-brand-600 text-white font-bold text-[10px] uppercase py-1.5 px-3 rounded-lg transition duration-150 shadow-sm shadow-brand-500/10">
+                Apply
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Right Sidebar Interactive Form Checkout Footer -->
+    <div class="p-6 border-t border-slate-800 bg-[#0a152e] space-y-4">
+        <!-- Main Form Triggers Place Order Form Above -->
+        <button onclick="document.querySelector('form').submit();" class="w-full bg-brand-500 hover:bg-brand-600 text-white font-extrabold py-3.5 px-4 rounded-xl shadow-lg shadow-brand-500/20 transition duration-150 flex items-center justify-center gap-2 text-xs">
+            <i class="fa-solid fa-lock text-xs"></i>
+            <span>Pay ${{ book.price|default:"14.99" }} Now</span>
+        </button>
+        
+        <p class="text-[9px] text-slate-500 text-center leading-relaxed">
+            <i class="fa-solid fa-shield-halved text-emerald-500 mr-1"></i>
+            Secured checkout with military-grade 256-bit SSL encryption.
+        </p>
+    </div>
+</aside>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function selectPaymentMethod(method) {
+        const methodInput = document.getElementById('selected-payment-method');
+        const cardBtn = document.getElementById('method-card');
+        const bankBtn = document.getElementById('method-bank');
+        
+        const cardCheck = document.getElementById('check-card');
+        const bankCheck = document.getElementById('check-bank');
+        
+        const cardFields = document.getElementById('card-fields-container');
+        const bankInstructions = document.getElementById('bank-instructions-container');
+
+        methodInput.value = method;
+
+        if (method === 'card') {
+            // Update panel selection styles
+            cardBtn.className = "flex items-center justify-between p-4 rounded-xl border-2 border-brand-500 bg-brand-50/50 text-brand-600 transition duration-150 text-left";
+            bankBtn.className = "flex items-center justify-between p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition duration-150 text-left";
+            
+            // Checkmark visibility
+            cardCheck.className = "fa-solid fa-circle-check text-brand-500 text-sm";
+            bankCheck.className = "fa-solid fa-circle text-slate-200 text-sm hidden";
+
+            // Details blocks visibility
+            cardFields.classList.remove('hidden');
+            bankInstructions.classList.add('hidden');
+        } else {
+            // Update panel selection styles
+            bankBtn.className = "flex items-center justify-between p-4 rounded-xl border-2 border-brand-500 bg-brand-50/50 text-brand-600 transition duration-150 text-left";
+            cardBtn.className = "flex items-center justify-between p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition duration-150 text-left";
+            
+            // Checkmark visibility
+            bankCheck.className = "fa-solid fa-circle-check text-brand-500 text-sm";
+            cardCheck.className = "fa-solid fa-circle text-slate-200 text-sm hidden";
+
+            // Details blocks visibility
+            cardFields.classList.add('hidden');
+            bankInstructions.classList.remove('hidden');
+        }
     }
-  </script>
-</body>
-</html>
+</script>
+{% endblock %}

@@ -1,132 +1,251 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BookBase — {{ book.title|default:"Book Detail" }}</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Inter',sans-serif;background:#f3f4f6;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1.5rem;}
-    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:500;color:#64748b;cursor:pointer;margin-bottom:2px;text-decoration:none;}
-    .nav-item:hover{background:#f8fafc;color:#0f172a;}
-    .nav-item.active{background:#eff6ff;color:#2563eb;}
-    .fmt{padding:8px 16px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:13px;font-weight:500;color:#64748b;cursor:pointer;}
-    .fmt.active{border-color:#2563eb;color:#2563eb;background:#eff6ff;}
-  </style>
-</head>
-<body>
-  <div style="display:flex;width:100%;max-width:1400px;height:90vh;border-radius:24px;overflow:hidden;background:white;box-shadow:0 20px 60px rgba(0,0,0,0.1);">
-    <aside style="width:220px;background:white;border-right:1px solid #f1f5f9;display:flex;flex-direction:column;padding:1.5rem 1rem;flex-shrink:0;">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:2rem;padding:0 0.5rem;">
-        <div style="width:30px;height:30px;background:#2563eb;border-radius:8px;display:flex;align-items:center;justify-content:center;">
-          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-        </div>
-        <span style="font-size:17px;font-weight:700;color:#0f172a;">BookBase</span>
-      </div>
-      <a href="/" class="nav-item">Discover</a>
-      <a href="/categories/" class="nav-item">Category</a>
-      <a href="/library/" class="nav-item">My Library</a>
-      <a href="/orders/" class="nav-item">My Orders</a>
-      <a href="#" class="nav-item">Audio Books</a>
-      <a href="#" class="nav-item">Favourites</a>
-      <div style="margin-top:auto;">
-        <a href="/profile/" class="nav-item">Settings</a>
-        <a href="/logout/" class="nav-item" style="color:#ef4444;">Logout</a>
-      </div>
-    </aside>
+{% extends "base.html" %}
 
-    <main style="flex:1;display:flex;flex-direction:column;overflow:hidden;background:#fafafa;">
-      <header style="display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;background:white;border-bottom:1px solid #f1f5f9;">
-        <div style="display:flex;align-items:center;gap:1rem;">
-          <a href="/" style="display:flex;align-items:center;gap:6px;font-size:13px;color:#64748b;text-decoration:none;padding:6px 10px;border-radius:8px;background:#f8fafc;">← Back</a>
-          <span style="font-size:13px;color:#94a3b8;">Discover / {{ book.category|default:"General" }} / <strong style="color:#0f172a;">{{ book.title|default:"Book" }}</strong></span>
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;">
-          <img src="https://i.pravatar.cc/150?img=11" style="width:34px;height:34px;border-radius:50%;object-fit:cover;">
-          <span style="font-size:13px;font-weight:600;color:#374151;">{% if user.is_authenticated %}{{ user.username }}{% else %}Guest{% endif %}</span>
-        </div>
-      </header>
+{% block title %}BookBase — {{ book.title|default:"Book Detail" }}{% endblock %}
 
-      <div style="flex:1;overflow-y:auto;padding:2rem;">
-        {% if book %}
-        <div style="display:flex;gap:2.5rem;margin-bottom:2.5rem;">
-          <div style="flex-shrink:0;width:180px;">
-            <img src="{{ book.cover_url }}" alt="{{ book.title }}" style="width:100%;border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,0.15);">
-          </div>
-          <div style="flex:1;">
-            <span style="display:inline-block;background:#eff6ff;color:#1d4ed8;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;margin-bottom:0.75rem;">{{ book.category }}</span>
-            <h1 style="font-size:26px;font-weight:700;color:#0f172a;line-height:1.25;margin-bottom:0.4rem;">{{ book.title }}</h1>
-            <p style="font-size:14px;color:#64748b;margin-bottom:1rem;">by <span style="color:#2563eb;font-weight:500;">{{ book.author }}</span></p>
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;">
-              <span style="color:#f59e0b;font-size:15px;">★★★★★</span>
-              <span style="font-size:14px;font-weight:600;color:#0f172a;">{{ book.rating }}</span>
-              <span style="font-size:13px;color:#94a3b8;">{{ book.ratings_count }} ratings · {{ book.reviews_count }} reviews</span>
-            </div>
-            <div style="display:flex;gap:1.5rem;margin-bottom:1.5rem;padding:1rem 0;border-top:1px solid #f1f5f9;border-bottom:1px solid #f1f5f9;">
-              <div style="text-align:center;"><div style="font-size:16px;font-weight:700;color:#0f172a;">{{ book.pages }}</div><div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;">Pages</div></div>
-              <div style="text-align:center;"><div style="font-size:16px;font-weight:700;color:#0f172a;">{{ book.category }}</div><div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;">Genre</div></div>
-              <div style="text-align:center;"><div style="font-size:16px;font-weight:700;color:#0f172a;">PDF · EPUB</div><div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;">Formats</div></div>
-            </div>
-            <p style="font-size:14px;color:#475569;line-height:1.75;margin-bottom:1.5rem;">{{ book.description }}</p>
-            <div style="display:flex;gap:10px;align-items:center;">
-              <a href="/checkout/?book_id={{ book.id }}" style="padding:12px 28px;background:#2563eb;color:white;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;text-decoration:none;">Buy Now</a>
-              {% if user.is_authenticated %}
-              <form method="POST" action="/library/add_book/" style="display:inline;">
-                {% csrf_token %}
-                <input type="hidden" name="book_id" value="{{ book.id }}">
-                <button type="submit" style="padding:12px 20px;background:white;color:#0f172a;border:1.5px solid #e2e8f0;border-radius:12px;font-size:14px;font-weight:500;cursor:pointer;">Add to Library</button>
-              </form>
-              {% endif %}
-            </div>
-          </div>
-        </div>
+<!-- Highlight Discover in sidebar -->
+{% block nav_discover %}bg-brand-50 text-brand-600 font-semibold{% endblock %}
 
-        <div style="margin-bottom:1.5rem;">
-          <h2 style="font-size:16px;font-weight:700;color:#0f172a;margin-bottom:1rem;">Available formats</h2>
-          <div style="display:flex;gap:10px;">
-            <div class="fmt active" onclick="selectFmt(this)">PDF</div>
-            <div class="fmt" onclick="selectFmt(this)">EPUB</div>
-            <div class="fmt" onclick="selectFmt(this)">MOBI</div>
-            <div class="fmt" onclick="selectFmt(this)">Audiobook</div>
-          </div>
+<!-- Customize dynamic Page Header specifically for Book details -->
+{% block header %}
+<header class="flex items-center justify-between px-6 py-5 bg-white border-b border-slate-200/80 shadow-sm shrink-0">
+    <div class="flex items-center space-x-4">
+        <!-- Back Button -->
+        <a href="/" class="flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200/80 px-3.5 py-2 rounded-xl transition duration-150">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back</span>
+        </a>
+        <!-- Dynamic Breadcrumb -->
+        <span class="hidden sm:inline text-xs text-slate-400 font-medium">
+            Discover / <span class="text-slate-500 font-semibold">{{ book.category|default:"General" }}</span> / <strong class="text-slate-800 font-extrabold">{{ book.title|default:"Book" }}</strong>
+        </span>
+    </div>
+    
+    <div class="flex items-center space-x-4">
+        {% block header_actions %}{% endblock %}
+        
+        <!-- Account Status Badge -->
+        <div class="flex items-center gap-2.5 bg-slate-50 pl-2.5 pr-3.5 py-1.5 rounded-full border border-slate-200/60 shadow-sm">
+            <img src="https://i.pravatar.cc/150?img=11" alt="User Profile" class="w-6 h-6 rounded-full object-cover border border-slate-200">
+            <span class="text-xs font-bold text-slate-700">
+                {% if user.is_authenticated %}{{ user.username }}{% else %}Guest{% endif %}
+            </span>
         </div>
-        {% else %}
-        <div style="text-align:center;padding:4rem;color:#94a3b8;">
-          <p style="font-size:16px;">No book selected. <a href="/" style="color:#2563eb;">Go back to discover.</a></p>
-        </div>
-        {% endif %}
-      </div>
-    </main>
+    </div>
+</header>
+{% endblock %}
 
+<!-- Main dynamic page block -->
+{% block content %}
+<div class="max-w-4xl mx-auto">
     {% if book %}
-    <aside style="width:280px;background:#0f172a;display:flex;flex-direction:column;padding:1.75rem 1.5rem;flex-shrink:0;overflow-y:auto;">
-      <div style="width:130px;margin:0 auto 1.25rem;border-radius:12px;overflow:hidden;box-shadow:0 12px 28px rgba(0,0,0,0.4);">
-        <img src="{{ book.cover_url }}" style="width:100%;display:block;">
-      </div>
-      <div style="font-size:16px;font-weight:700;color:white;text-align:center;margin-bottom:4px;">{{ book.title }}</div>
-      <div style="font-size:12px;color:#94a3b8;text-align:center;margin-bottom:1rem;">{{ book.author }}</div>
-      <div style="display:flex;justify-content:center;margin-bottom:1.25rem;font-size:13px;color:#f59e0b;">★★★★★</div>
-      <hr style="border:none;border-top:1px solid #1e293b;margin:0 0 1rem;">
-      <div style="display:flex;justify-content:space-between;margin-bottom:0.65rem;"><span style="font-size:12px;color:#64748b;">Category</span><span style="font-size:12px;font-weight:600;color:#cbd5e1;">{{ book.category }}</span></div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:0.65rem;"><span style="font-size:12px;color:#64748b;">Pages</span><span style="font-size:12px;font-weight:600;color:#cbd5e1;">{{ book.pages }}</span></div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:0.65rem;"><span style="font-size:12px;color:#64748b;">Rating</span><span style="font-size:12px;font-weight:600;color:#f59e0b;">{{ book.rating }} ★</span></div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:0.65rem;"><span style="font-size:12px;color:#64748b;">Status</span><span style="font-size:12px;font-weight:600;color:#4ade80;">Available</span></div>
-      <hr style="border:none;border-top:1px solid #1e293b;margin:1rem 0;">
-      <div style="background:#1e293b;border-radius:12px;padding:1rem;margin-bottom:1rem;">
-        <div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Price</div>
-        <div style="font-size:24px;font-weight:700;color:white;">$12.99</div>
-        <div style="font-size:11px;color:#4ade80;margin-top:4px;">Digital download</div>
-      </div>
-      <a href="/checkout/?book_id={{ book.id }}" style="width:100%;padding:12px;background:#2563eb;color:white;border:none;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px;text-align:center;text-decoration:none;display:block;">Buy Now</a>
-    </aside>
+    <div class="flex flex-col md:flex-row gap-8 lg:gap-12 items-start mb-10">
+        
+        <!-- Left: Static Book Cover Artwork -->
+        <div class="w-48 aspect-[3/4] shrink-0 mx-auto md:mx-0">
+            <div class="relative w-full h-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-3 shadow-xl shadow-slate-300/40 hover:shadow-2xl hover:shadow-slate-300/60 transition duration-300">
+                <div class="absolute inset-0 bg-white opacity-5 mix-blend-overlay rounded-2xl"></div>
+                <img src="{{ book.cover_url }}" alt="{{ book.title }}" class="w-full h-full object-cover rounded-xl shadow-md">
+            </div>
+        </div>
+
+        <!-- Right: Comprehensive Metadata & Details -->
+        <div class="flex-1 text-center md:text-left">
+            <!-- Genre Badge Tag -->
+            <span class="inline-block bg-brand-50 text-brand-600 text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full mb-3.5">
+                {{ book.category }}
+            </span>
+            
+            <!-- Book Identity title & Author -->
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight mb-2">
+                {{ book.title }}
+            </h1>
+            <p class="text-sm text-slate-500">
+                by <span class="text-brand-500 hover:underline font-semibold cursor-pointer">{{ book.author }}</span>
+            </p>
+
+            <!-- Star Ratings row -->
+            <div class="flex items-center justify-center md:justify-start gap-2.5 mt-3.5 mb-6">
+                <div class="flex text-yellow-400 gap-0.5 text-xs">
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                </div>
+                <span class="text-xs font-bold text-slate-800">{{ book.rating }}</span>
+                <span class="text-xs text-slate-400 font-medium">
+                    ({{ book.ratings_count|default:"1,240" }} ratings &middot; {{ book.reviews_count|default:"84" }} reviews)
+                </span>
+            </div>
+
+            <!-- Page Meta Columns Grid -->
+            <div class="grid grid-cols-3 gap-4 border-t border-b border-slate-200/80 py-4.5 mb-6">
+                <div>
+                    <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Pages</span>
+                    <span class="text-sm font-extrabold text-slate-800 mt-0.5 block">{{ book.pages }}</span>
+                </div>
+                <div>
+                    <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Genre</span>
+                    <span class="text-xs font-extrabold text-slate-800 mt-0.5 block truncate">{{ book.category }}</span>
+                </div>
+                <div>
+                    <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Formats</span>
+                    <span class="text-xs font-extrabold text-slate-800 mt-0.5 block">PDF, EPUB, MOBI</span>
+                </div>
+            </div>
+
+            <!-- Description Body -->
+            <div class="space-y-2 mb-8">
+                <h4 class="text-[10px] uppercase tracking-wider font-extrabold text-slate-400">Description</h4>
+                <p class="text-xs text-slate-600 leading-relaxed text-justify">
+                    {{ book.description }}
+                </p>
+            </div>
+
+            <!-- Quick Action Interactive Triggers -->
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <a href="/checkout/?book_id={{ book.id }}" class="flex-1 sm:flex-initial text-center bg-brand-500 hover:bg-brand-600 text-white font-bold py-3 px-6 rounded-xl shadow-md shadow-brand-500/20 transition duration-150 text-xs flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span>Buy Now</span>
+                </a>
+                
+                {% if user.is_authenticated %}
+                <form method="POST" action="/library/add_book/" class="flex flex-col sm:inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="book_id" value="{{ book.id }}">
+                    <button type="submit" class="bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 font-bold py-3 px-6 rounded-xl transition duration-150 text-xs flex items-center justify-center gap-2 shadow-sm">
+                        <i class="fa-solid fa-plus text-slate-400"></i>
+                        <span>Add to My Library</span>
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Interactive Media Formats Selection -->
+    <div class="border-t border-slate-200/80 pt-8">
+        <h2 class="text-sm font-bold text-slate-900 tracking-tight mb-4">Available Download Formats</h2>
+        
+        <div class="flex flex-wrap gap-3">
+            <button class="fmt-btn active border-2 border-brand-500 bg-brand-50/50 text-brand-600 px-5 py-3 rounded-xl font-bold text-xs shadow-sm hover:shadow-md transition duration-150 flex items-center gap-2" onclick="selectFmt(this, 'PDF')">
+                <i class="fa-solid fa-file-pdf"></i> PDF Download
+            </button>
+            <button class="fmt-btn border-2 border-slate-200 bg-white text-slate-500 hover:text-slate-800 hover:border-slate-300 px-5 py-3 rounded-xl font-bold text-xs shadow-sm hover:shadow-md transition duration-150 flex items-center gap-2" onclick="selectFmt(this, 'EPUB')">
+                <i class="fa-solid fa-book-open"></i> EPUB Ebook
+            </button>
+            <button class="fmt-btn border-2 border-slate-200 bg-white text-slate-500 hover:text-slate-800 hover:border-slate-300 px-5 py-3 rounded-xl font-bold text-xs shadow-sm hover:shadow-md transition duration-150 flex items-center gap-2" onclick="selectFmt(this, 'MOBI')">
+                <i class="fa-solid fa-tablet-screen-button"></i> MOBI Kindle
+            </button>
+            <button class="fmt-btn border-2 border-slate-200 bg-white text-slate-500 hover:text-slate-800 hover:border-slate-300 px-5 py-3 rounded-xl font-bold text-xs shadow-sm hover:shadow-md transition duration-150 flex items-center gap-2" onclick="selectFmt(this, 'Audiobook')">
+                <i class="fa-solid fa-headphones"></i> Audiobook MP3
+            </button>
+        </div>
+    </div>
+
+    {% else %}
+    <!-- Fallback State -->
+    <div class="py-16 flex flex-col items-center justify-center text-slate-400">
+        <i class="fa-solid fa-book-open text-5xl mb-4 text-slate-300"></i>
+        <p class="text-sm font-bold mb-1.5">No book has been selected</p>
+        <p class="text-xs text-slate-400 mb-5">Please return to discover layout to look through our catalog.</p>
+        <a href="/" class="bg-brand-500 hover:bg-brand-600 text-white font-bold py-2.5 px-5 rounded-xl transition text-xs shadow-md shadow-brand-500/10">
+            Go back to discover
+        </a>
+    </div>
     {% endif %}
-  </div>
-  <script>
-    function selectFmt(el){
-      document.querySelectorAll('.fmt').forEach(x=>x.classList.remove('active'));
-      el.classList.add('active');
+</div>
+{% endblock %}
+
+<!-- Right Details Sidebar Pane (Interactive Overlay) -->
+{% block right_panel %}
+{% if book %}
+<aside class="w-full md:w-80 bg-[#0e1d3e] text-white flex flex-col justify-between shrink-0 border-l border-slate-800">
+    <div class="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-6">
+        
+        <!-- Cover Art Graphic Frame -->
+        <div class="flex flex-col items-center">
+            <div class="w-40 aspect-[3/4] bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-4 shadow-2xl flex items-center justify-center relative overflow-hidden mb-5">
+                <div class="absolute inset-0 bg-white opacity-5 mix-blend-overlay"></div>
+                <img src="{{ book.cover_url }}" alt="{{ book.title }}" class="h-full object-cover rounded shadow-lg">
+            </div>
+            <h2 class="text-base font-bold text-center line-clamp-1 text-white">{{ book.title }}</h2>
+            <p class="text-xs text-slate-400 mt-1 text-center">{{ book.author }}</p>
+        </div>
+
+        <!-- Metric Table -->
+        <div class="grid grid-cols-3 gap-2.5 text-center border-t border-b border-slate-800/80 py-4">
+            <div>
+                <p class="text-[10px] text-slate-400 uppercase font-bold">Pages</p>
+                <p class="text-xs font-bold text-white mt-1">{{ book.pages }}</p>
+            </div>
+            <div>
+                <p class="text-[10px] text-slate-400 uppercase font-bold">Rating</p>
+                <p class="text-xs font-bold text-yellow-400 mt-1 flex items-center justify-center gap-0.5">
+                    <i class="fa-solid fa-star text-[10px]"></i> {{ book.rating }}
+                </p>
+            </div>
+            <div>
+                <p class="text-[10px] text-slate-400 uppercase font-bold">Reviews</p>
+                <p class="text-xs font-bold text-white mt-1">{{ book.reviews_count|default:"84" }}</p>
+            </div>
+        </div>
+
+        <!-- Sidebar Book Stats List -->
+        <div class="space-y-3">
+            <div class="flex justify-between text-xs pb-1.5 border-b border-slate-800/60">
+                <span class="text-slate-400">Category</span>
+                <span class="font-semibold text-slate-200">{{ book.category }}</span>
+            </div>
+            <div class="flex justify-between text-xs pb-1.5 border-b border-slate-800/60">
+                <span class="text-slate-400">Format Selected</span>
+                <span id="sidebar-fmt" class="font-bold text-brand-400">PDF Document</span>
+            </div>
+            <div class="flex justify-between text-xs">
+                <span class="text-slate-400">Availability Status</span>
+                <span class="font-bold text-emerald-400 flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse"></span> Instant Download
+                </span>
+            </div>
+        </div>
+
+        <!-- Sidebar Pricing Module -->
+        <div class="bg-slate-900/45 border border-slate-800/60 rounded-2xl p-4.5">
+            <span class="text-[10px] text-slate-400 uppercase tracking-wider font-extrabold">Price</span>
+            <div class="text-2xl font-black text-white mt-1">$12.99</div>
+            <p class="text-[9px] text-slate-500 mt-1 leading-normal">Includes full offline mobile access, highlights, and annotations dashboard synchronizing.</p>
+        </div>
+
+    </div>
+
+    <!-- Sticky Bottom Drawer Checkout Action -->
+    <div class="p-6 border-t border-slate-800 bg-[#0a152e]">
+        <a href="/checkout/?book_id={{ book.id }}" class="w-full bg-brand-500 hover:bg-brand-600 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-brand-500/20 transition flex items-center justify-center gap-2 text-xs text-center">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span>Instant Purchase</span>
+        </a>
+    </div>
+</aside>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function selectFmt(element, format) {
+        // Toggle selected styling classes on details action buttons
+        const buttons = document.querySelectorAll('.fmt-btn');
+        buttons.forEach(btn => {
+            btn.className = "fmt-btn border-2 border-slate-200 bg-white text-slate-500 hover:text-slate-800 hover:border-slate-300 px-5 py-3 rounded-xl font-bold text-xs shadow-sm hover:shadow-md transition duration-150 flex items-center gap-2";
+        });
+        
+        // Highlight current target button
+        element.className = "fmt-btn active border-2 border-brand-500 bg-brand-50/50 text-brand-600 px-5 py-3 rounded-xl font-bold text-xs shadow-sm hover:shadow-md transition duration-150 flex items-center gap-2";
+        
+        // Dynamically update metadata in Right Sidebar Pane if present
+        const sidebarFmtSpan = document.getElementById('sidebar-fmt');
+        if (sidebarFmtSpan) {
+            sidebarFmtSpan.innerText = format + " Format";
+        }
     }
-  </script>
-</body>
-</html>
+</script>
+{% endblock %}
