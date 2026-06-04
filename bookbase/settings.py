@@ -162,3 +162,16 @@ ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
 AUTH_USER_MODEL = 'accounts.User'
+
+# --- DEVELOPER WORKSPACE SECURITY CONFIGURATION ---
+# Allow CSRF cookies to work securely across container proxies (e.g., Codespaces)
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.githubpreview.dev',
+    'https://*.gitpod.io',
+    'https://*.app.github.dev',
+    'http://localhost:8000',
+    '[http://127.0.0.1:8000](http://127.0.0.1:8000)',
+]
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

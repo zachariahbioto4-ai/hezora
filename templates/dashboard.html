@@ -1,128 +1,600 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full bg-slate-50">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BookBase — Discover</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Inter',sans-serif;background:#f3f4f6;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1.5rem;}
-    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:500;color:#64748b;cursor:pointer;margin-bottom:2px;text-decoration:none;}
-    .nav-item:hover{background:#f8fafc;color:#0f172a;}
-    .nav-item.active{background:#eff6ff;color:#2563eb;}
-    .genre-pill{padding:7px 16px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid #e2e8f0;background:white;color:#64748b;white-space:nowrap;}
-    .genre-pill.active{background:#2563eb;color:white;border-color:#2563eb;}
-    .book-card{background:white;border-radius:16px;border:1px solid #f1f5f9;overflow:hidden;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;}
-    .book-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.09);}
-    .star{color:#f59e0b;font-size:12px;}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookBase - Dashboard</title>
+    <!-- Tailwind CSS Engine -->
+    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <link href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f5ff',
+                            100: '#e0ebff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
 </head>
-<body>
-  <div style="display:flex;width:100%;max-width:1400px;height:90vh;border-radius:24px;overflow:hidden;background:white;box-shadow:0 20px 60px rgba(0,0,0,0.1);">
+<body class="h-full font-sans antialiased text-slate-800 bg-slate-100 flex flex-col overflow-hidden">
 
-    <aside style="width:220px;background:white;border-right:1px solid #f1f5f9;display:flex;flex-direction:column;padding:1.5rem 1rem;flex-shrink:0;">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:2rem;padding:0 0.5rem;">
-        <div style="width:30px;height:30px;background:#2563eb;border-radius:8px;display:flex;align-items:center;justify-content:center;">
-          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-        </div>
-        <span style="font-size:17px;font-weight:700;color:#0f172a;">BookBase</span>
-      </div>
-      <a href="/dashboard/" class="nav-item active">Discover</a>
-      <a href="/categories/" class="nav-item">Category</a>
-      <a href="/library/" class="nav-item">My Library</a>
-      <a href="#" class="nav-item">Downloads</a>
-      <a href="#" class="nav-item">Audio Books</a>
-      <a href="#" class="nav-item">Favourites</a>
-      <div style="margin-top:auto;">
-        <a href="/profile/" class="nav-item">Settings</a>
-        <a href="/auth/" class="nav-item">Logout</a>
-      </div>
-    </aside>
-
-    <main style="flex:1;display:flex;flex-direction:column;overflow:hidden;background:#fafafa;">
-      <header style="display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;background:white;border-bottom:1px solid #f1f5f9;flex-shrink:0;">
-        <div>
-          <h1 style="font-size:20px;font-weight:700;color:#0f172a;">Discover Books</h1>
-          <p style="font-size:13px;color:#94a3b8;margin-top:2px;">Find your next favourite read</p>
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;">
-          <div style="display:flex;align-items:center;gap:8px;background:white;border:1px solid #e2e8f0;border-radius:10px;padding:7px 12px;">
-            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#94a3b8" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-            <input placeholder="Search books, authors..." style="border:none;outline:none;font-size:13px;color:#374151;width:200px;background:transparent;">
-          </div>
-          <img src="https://i.pravatar.cc/150?img=11" style="width:34px;height:34px;border-radius:50%;object-fit:cover;">
-          <span style="font-size:13px;font-weight:600;color:#374151;">Balogun</span>
-        </div>
-      </header>
-
-      <div style="flex:1;overflow-y:auto;padding:1.5rem 2rem;">
-
-        <!-- Featured Banner -->
-        <div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:18px;padding:2rem 2.5rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;color:white;">
-          <div>
-            <span style="font-size:11px;font-weight:600;background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:20px;letter-spacing:0.5px;">FEATURED THIS WEEK</span>
-            <h2 style="font-size:22px;font-weight:700;margin-top:0.75rem;margin-bottom:0.5rem;">Atomic Habits</h2>
-            <p style="font-size:13px;color:#bfdbfe;margin-bottom:1.25rem;max-width:380px;">An easy and proven way to build good habits and break bad ones by James Clear.</p>
-            <a href="/book/" style="display:inline-block;background:white;color:#2563eb;font-size:13px;font-weight:600;padding:10px 20px;border-radius:10px;text-decoration:none;">Read Now</a>
-          </div>
-          <img src="https://m.media-amazon.com/images/I/61k7W2m4f+L._AC_UF1000,1000_QL80_.jpg" style="width:120px;border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,0.3);">
-        </div>
-
-        <!-- Genre Pills -->
-        <div style="display:flex;gap:8px;margin-bottom:1.5rem;overflow-x:auto;padding-bottom:4px;">
-          <button class="genre-pill active">All</button>
-          <button class="genre-pill">Business</button>
-          <button class="genre-pill">Fiction</button>
-          <button class="genre-pill">Self Help</button>
-          <button class="genre-pill">Science</button>
-          <button class="genre-pill">History</button>
-          <button class="genre-pill">Technology</button>
-          <button class="genre-pill">Romance</button>
-        </div>
-
-        <!-- Book Grid -->
-        <h3 style="font-size:15px;font-weight:700;color:#0f172a;margin-bottom:1rem;">Trending Now</h3>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;">
-          {% for book in books %}
-          <div class="book-card" onclick="window.location='/book/'">
-            <img src="{{ book.cover_image.url }}" style="width:100%;height:200px;object-fit:cover;">
-            <div style="padding:12px;">
-              <p style="font-size:13px;font-weight:600;color:#0f172a;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ book.title }}</p>
-              <p style="font-size:11px;color:#94a3b8;margin-bottom:6px;">{{ book.authors.first }}</p>
-              <div style="display:flex;align-items:center;justify-content:space-between;">
-                <span style="font-size:13px;font-weight:700;color:#2563eb;">${{ book.price }}</span>
-                <span class="star">★ 4.5</span>
-              </div>
+    <!-- Top Mobile Navigation Bar -->
+    <header class="flex lg:hidden items-center justify-between bg-white border-b border-slate-200 px-4 py-3 shadow-sm shrink-0">
+        <div class="flex items-center space-x-2">
+            <div class="p-2 bg-brand-500 rounded-lg text-white">
+                <i class="fa-solid fa-book-open"></i>
             </div>
-          </div>
-          {% empty %}
-          <!-- Placeholder cards -->
-          {% for i in "12345678" %}
-          <div class="book-card" onclick="window.location='/book/'">
-            <img src="https://m.media-amazon.com/images/I/61k7W2m4f+L._AC_UF1000,1000_QL80_.jpg" style="width:100%;height:200px;object-fit:cover;">
-            <div style="padding:12px;">
-              <p style="font-size:13px;font-weight:600;color:#0f172a;margin-bottom:4px;">Sample Book Title</p>
-              <p style="font-size:11px;color:#94a3b8;margin-bottom:6px;">Author Name</p>
-              <div style="display:flex;align-items:center;justify-content:space-between;">
-                <span style="font-size:13px;font-weight:700;color:#2563eb;">$12.99</span>
-                <span class="star">★ 4.5</span>
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-          {% endfor %}
+            <span class="font-bold text-lg tracking-tight">BookBase</span>
         </div>
-      </div>
-    </main>
-  </div>
-  <script>
-    document.querySelectorAll('.genre-pill').forEach(p => {
-      p.addEventListener('click', () => {
-        document.querySelectorAll('.genre-pill').forEach(x => x.classList.remove('active'));
-        p.classList.add('active');
-      });
-    });
-  </script>
+        <div class="flex items-center space-x-4">
+            <button id="mobileMenuBtn" class="text-slate-600 focus:outline-none">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden relative">
+        <!-- Sidebar Navigation Drawer (Desktop) -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-slate-200 flex flex-col justify-between transform -translate-x-full transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 shrink-0">
+            <div>
+                <!-- Brand Identity Header -->
+                <div class="hidden lg:flex items-center space-x-3 px-6 py-6 border-b border-slate-100">
+                    <div class="p-2 bg-brand-500 rounded-lg text-white">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <span class="font-extrabold text-xl tracking-tight text-slate-900">BookBase</span>
+                </div>
+
+                <!-- Navigation List -->
+                <nav class="px-4 py-6 space-y-1.5">
+                    <a href="?category=All" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-200 {% if active_category == 'All' and not search_query %}bg-brand-50 text-brand-600 font-semibold{% else %}text-slate-600 hover:bg-slate-50 hover:text-slate-900{% endif %}">
+                        <i class="fa-solid fa-compass text-lg"></i>
+                        <span>Discover</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition duration-200">
+                        <i class="fa-solid fa-table-cells-large text-lg"></i>
+                        <span>Category</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition duration-200">
+                        <i class="fa-solid fa-book-bookmark text-lg"></i>
+                        <span>My Library</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition duration-200">
+                        <i class="fa-solid fa-circle-down text-lg"></i>
+                        <span>Download</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition duration-200">
+                        <i class="fa-solid fa-headphones text-lg"></i>
+                        <span>Audio Books</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition duration-200">
+                        <i class="fa-solid fa-heart text-lg"></i>
+                        <span>Favourite</span>
+                    </a>
+
+                    <div class="h-px bg-slate-200 my-6"></div>
+
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition duration-200">
+                        <i class="fa-solid fa-gear text-lg"></i>
+                        <span>Settings</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition duration-200">
+                        <i class="fa-solid fa-circle-info text-lg"></i>
+                        <span>Support</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 hover:text-red-700 transition duration-200">
+                        <i class="fa-solid fa-arrow-right-from-bracket text-lg"></i>
+                        <span>Logout</span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Developer Profile / Brand Footer -->
+            <div class="p-4 border-t border-slate-200">
+                <div class="flex items-center space-x-3 p-2 rounded-lg bg-slate-50">
+                    <img src="[https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=facearea&facepad=2&w=256&h=256&q=80](https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=facearea&facepad=2&w=256&h=256&q=80)" alt="Avatar" class="w-10 h-10 rounded-full object-cover ring-2 ring-brand-500">
+                    <div class="flex-1 overflow-hidden">
+                        <p class="font-semibold text-sm text-slate-900 truncate">Balogun</p>
+                        <p class="text-xs text-slate-500 truncate">@balogun_code</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace and Details Grid -->
+        <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
+            <!-- Center Feed -->
+            <div class="flex-1 flex flex-col overflow-y-auto custom-scrollbar p-6 space-y-8 bg-slate-50">
+                
+                <!-- Search & Actions Bar -->
+                <div class="flex items-center justify-between gap-4">
+                    <form method="GET" class="w-full max-w-lg relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
+                        <input type="text" name="q" value="{{ search_query }}" placeholder="Search your favourite books..." class="w-full pl-11 pr-4 py-3 rounded-full bg-white border border-slate-200 shadow-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-sm">
+                        {% if search_query %}
+                        <a href="?category={{ active_category }}" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 hover:text-slate-600">
+                            <i class="fa-solid fa-xmark"></i>
+                        </a>
+                        {% endif %}
+                    </form>
+
+                    <!-- Header Meta Icons -->
+                    <div class="hidden sm:flex items-center space-x-4 shrink-0">
+                        <button class="relative p-2.5 bg-white border border-slate-200 rounded-full shadow-sm text-slate-600 hover:text-slate-900 transition hover:shadow-md">
+                            <i class="fa-solid fa-bell"></i>
+                            <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recommended Slider Row -->
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold text-slate-900">Recommended</h2>
+                        <a href="?category=All" class="text-sm font-semibold text-brand-500 hover:text-brand-600">See All <i class="fa-solid fa-chevron-right ml-1"></i></a>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {% for book in recommended|slice:":4" %}
+                        <a href="?category={{ active_category }}&q={{ search_query }}&details_id={{ book.id }}" class="group bg-white p-4 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between">
+                            <div class="w-full aspect-[3/4] bg-gradient-to-br {{ book.color }} rounded-xl flex items-center justify-center p-4 shadow-inner relative overflow-hidden mb-4">
+                                <!-- Absolute design graphics to look exactly like the cover -->
+                                <div class="absolute inset-0 bg-white opacity-5 mix-blend-overlay"></div>
+                                <img src="{{ book.cover_url }}" alt="{{ book.title }}" class="h-full w-auto object-cover rounded shadow-lg group-hover:scale-105 transition duration-300">
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-sm leading-snug line-clamp-1 group-hover:text-brand-600 transition">{{ book.title }}</h3>
+                                <p class="text-xs text-slate-500 mt-1">{{ book.author }}</p>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Categories & Filter Tags -->
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold text-slate-900">Categories</h2>
+                        <button class="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition">
+                            <i class="fa-solid fa-sliders"></i>
+                        </button>
+                    </div>
+
+                    <div class="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar">
+                        <a href="?category=All&q={{ search_query }}" class="px-5 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition {% if active_category == 'All' %}bg-brand-500 text-white shadow-lg shadow-brand-500/20{% else %}bg-white border border-slate-200 text-slate-600 hover:bg-slate-100{% endif %}">
+                            All
+                        </a>
+                        {% for cat in categories %}
+                        <a href="?category={{ cat }}&q={{ search_query }}" class="px-5 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition {% if active_category == cat %}bg-brand-500 text-white shadow-lg shadow-brand-500/20{% else %}bg-white border border-slate-200 text-slate-600 hover:bg-slate-100{% endif %}">
+                            {{ cat }}
+                        </a>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Filtered Grid View -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+                        {% for book in books %}
+                        <a href="?category={{ active_category }}&q={{ search_query }}&details_id={{ book.id }}" class="group bg-white p-4 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition duration-200">
+                            <div class="w-full aspect-[3/4] bg-gradient-to-br {{ book.color }} rounded-xl flex items-center justify-center p-3 shadow-inner relative overflow-hidden mb-3">
+                                <span class="absolute top-2 right-2 bg-black/40 backdrop-blur-md text-[10px] text-yellow-400 font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                                    <i class="fa-solid fa-star"></i> {{ book.rating }}
+                                </span>
+                                <img src="{{ book.cover_url }}" alt="{{ book.title }}" class="h-32 object-cover rounded shadow group-hover:scale-105 transition duration-300">
+                            </div>
+                            <h3 class="font-bold text-slate-900 text-xs line-clamp-1">{{ book.title }}</h3>
+                            <p class="text-[10px] text-slate-500 mt-1">{{ book.author }}</p>
+                        </a>
+                        {% empty %}
+                        <div class="col-span-full py-12 flex flex-col items-center justify-center text-slate-400">
+                            <i class="fa-solid fa-book-open text-4xl mb-3"></i>
+                            <p class="text-sm font-medium">No books match your criteria.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Details Panel (Interactive) -->
+            {% if selected_book %}
+            <aside class="w-full md:w-80 bg-[#0e1d3e] text-white flex flex-col justify-between shrink-0 border-l border-slate-800">
+                <div class="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-6">
+                    
+                    <!-- Cover Artwork View -->
+                    <div class="flex flex-col items-center">
+                        <div class="w-44 aspect-[3/4] bg-gradient-to-br {{ selected_book.color }} rounded-2xl p-6 shadow-2xl flex items-center justify-center relative overflow-hidden mb-6">
+                            <img src="{{ selected_book.cover_url }}" alt="{{ selected_book.title }}" class="h-full object-cover rounded-md shadow-2xl">
+                        </div>
+                        <h2 class="text-lg font-bold text-center line-clamp-1">{{ selected_book.title }}</h2>
+                        <p class="text-sm text-slate-400 mt-1 text-center">{{ selected_book.author }}</p>
+                    </div>
+
+                    <!-- Metrics Indicators -->
+                    <div class="grid grid-cols-3 gap-3 text-center border-t border-b border-slate-800 py-4">
+                        <div>
+                            <p class="text-xs text-slate-400">Pages</p>
+                            <p class="text-sm font-bold text-white mt-1">{{ selected_book.pages }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400">Rating</p>
+                            <p class="text-sm font-bold text-yellow-400 mt-1 flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-star"></i> {{ selected_book.rating }}
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400">Reviews</p>
+                            <p class="text-sm font-bold text-white mt-1">{{ selected_book.reviews_count }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Book Bio -->
+                    <div class="space-y-2">
+                        <h4 class="text-xs uppercase tracking-wider font-semibold text-slate-400">Description</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">{{ selected_book.description }}</p>
+                    </div>
+
+                </div>
+
+                <!-- Call to Actions -->
+                <div class="p-6 border-t border-slate-800 bg-[#0a152e]">
+                    <button class="w-full bg-brand-500 hover:bg-brand-600 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-brand-500/20 transition flex items-center justify-center gap-2 text-sm">
+                        <i class="fa-solid fa-book-open-reader"></i>
+                        <span>Read Now</span>
+                    </button>
+                </div>
+            </aside>
+            {% endif %}
+
+        </main>
+    </div>
+
+    <!-- Mobile Drawer Overlay and Logic Scripts -->
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+
+        if(mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                sidebar.classList.toggle('-translate-x-full');
+            });
+        }
+
+        // Close sidebar on outer tap
+        document.addEventListener('click', (e) => {
+            if (!sidebar.contains(e.target) && e.target !== mobileMenuBtn) {
+                sidebar.classList.add('-translate-x-full');
+            }
+        });
+    </script>
+</body>
+</html>
+EOFmkdir -p templates
+cat << 'EOF' > templates/dashboard.html
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookBase - Dashboard</title>
+    <!-- Tailwind CSS Engine -->
+    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <link href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f5ff',
+                            100: '#e0ebff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="h-full font-sans antialiased text-slate-800 bg-slate-100 flex flex-col overflow-hidden">
+
+    <!-- Top Mobile Navigation Bar -->
+    <header class="flex lg:hidden items-center justify-between bg-white border-b border-slate-200 px-4 py-3 shadow-sm shrink-0">
+        <div class="flex items-center space-x-2">
+            <div class="p-2 bg-brand-500 rounded-lg text-white">
+                <i class="fa-solid fa-book-open"></i>
+            </div>
+            <span class="font-bold text-lg tracking-tight">BookBase</span>
+        </div>
+        <div class="flex items-center space-x-4">
+            <button id="mobileMenuBtn" class="text-slate-600 focus:outline-none">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden relative">
+        <!-- Sidebar Navigation Drawer (Desktop) -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-slate-200 flex flex-col justify-between transform -translate-x-full transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 shrink-0">
+            <div>
+                <!-- Brand Identity Header -->
+                <div class="hidden lg:flex items-center space-x-3 px-6 py-6 border-b border-slate-100">
+                    <div class="p-2 bg-brand-500 rounded-lg text-white">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <span class="font-extrabold text-xl tracking-tight text-slate-900">BookBase</span>
+                </div>
+
+                <!-- Navigation List -->
+                <nav class="px-4 py-6 space-y-1.5">
+                    <a href="?category=All" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-200 {% if active_category == 'All' and not search_query %}bg-brand-50 text-brand-600 font-semibold{% else %}text-slate-600 hover:bg-slate-50 hover:text-slate-900{% endif %}">
+                        <i class="fa-solid fa-compass text-lg"></i>
+                        <span>Discover</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition duration-200">
+                        <i class="fa-solid fa-table-cells-large text-lg"></i>
+                        <span>Category</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition duration-200">
+                        <i class="fa-solid fa-book-bookmark text-lg"></i>
+                        <span>My Library</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition duration-200">
+                        <i class="fa-solid fa-circle-down text-lg"></i>
+                        <span>Download</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition duration-200">
+                        <i class="fa-solid fa-headphones text-lg"></i>
+                        <span>Audio Books</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition duration-200">
+                        <i class="fa-solid fa-heart text-lg"></i>
+                        <span>Favourite</span>
+                    </a>
+
+                    <div class="h-px bg-slate-200 my-6"></div>
+
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition duration-200">
+                        <i class="fa-solid fa-gear text-lg"></i>
+                        <span>Settings</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition duration-200">
+                        <i class="fa-solid fa-circle-info text-lg"></i>
+                        <span>Support</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 hover:text-red-700 transition duration-200">
+                        <i class="fa-solid fa-arrow-right-from-bracket text-lg"></i>
+                        <span>Logout</span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Developer Profile / Brand Footer -->
+            <div class="p-4 border-t border-slate-200">
+                <div class="flex items-center space-x-3 p-2 rounded-lg bg-slate-50">
+                    <img src="[https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=facearea&facepad=2&w=256&h=256&q=80](https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=facearea&facepad=2&w=256&h=256&q=80)" alt="Avatar" class="w-10 h-10 rounded-full object-cover ring-2 ring-brand-500">
+                    <div class="flex-1 overflow-hidden">
+                        <p class="font-semibold text-sm text-slate-900 truncate">Balogun</p>
+                        <p class="text-xs text-slate-500 truncate">@balogun_code</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace and Details Grid -->
+        <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
+            <!-- Center Feed -->
+            <div class="flex-1 flex flex-col overflow-y-auto custom-scrollbar p-6 space-y-8 bg-slate-50">
+                
+                <!-- Search & Actions Bar -->
+                <div class="flex items-center justify-between gap-4">
+                    <form method="GET" class="w-full max-w-lg relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
+                        <input type="text" name="q" value="{{ search_query }}" placeholder="Search your favourite books..." class="w-full pl-11 pr-4 py-3 rounded-full bg-white border border-slate-200 shadow-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-sm">
+                        {% if search_query %}
+                        <a href="?category={{ active_category }}" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 hover:text-slate-600">
+                            <i class="fa-solid fa-xmark"></i>
+                        </a>
+                        {% endif %}
+                    </form>
+
+                    <!-- Header Meta Icons -->
+                    <div class="hidden sm:flex items-center space-x-4 shrink-0">
+                        <button class="relative p-2.5 bg-white border border-slate-200 rounded-full shadow-sm text-slate-600 hover:text-slate-900 transition hover:shadow-md">
+                            <i class="fa-solid fa-bell"></i>
+                            <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recommended Slider Row -->
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold text-slate-900">Recommended</h2>
+                        <a href="?category=All" class="text-sm font-semibold text-brand-500 hover:text-brand-600">See All <i class="fa-solid fa-chevron-right ml-1"></i></a>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {% for book in recommended|slice:":4" %}
+                        <a href="?category={{ active_category }}&q={{ search_query }}&details_id={{ book.id }}" class="group bg-white p-4 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between">
+                            <div class="w-full aspect-[3/4] bg-gradient-to-br {{ book.color }} rounded-xl flex items-center justify-center p-4 shadow-inner relative overflow-hidden mb-4">
+                                <!-- Absolute design graphics to look exactly like the cover -->
+                                <div class="absolute inset-0 bg-white opacity-5 mix-blend-overlay"></div>
+                                <img src="{{ book.cover_url }}" alt="{{ book.title }}" class="h-full w-auto object-cover rounded shadow-lg group-hover:scale-105 transition duration-300">
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-sm leading-snug line-clamp-1 group-hover:text-brand-600 transition">{{ book.title }}</h3>
+                                <p class="text-xs text-slate-500 mt-1">{{ book.author }}</p>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Categories & Filter Tags -->
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold text-slate-900">Categories</h2>
+                        <button class="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition">
+                            <i class="fa-solid fa-sliders"></i>
+                        </button>
+                    </div>
+
+                    <div class="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar">
+                        <a href="?category=All&q={{ search_query }}" class="px-5 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition {% if active_category == 'All' %}bg-brand-500 text-white shadow-lg shadow-brand-500/20{% else %}bg-white border border-slate-200 text-slate-600 hover:bg-slate-100{% endif %}">
+                            All
+                        </a>
+                        {% for cat in categories %}
+                        <a href="?category={{ cat }}&q={{ search_query }}" class="px-5 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition {% if active_category == cat %}bg-brand-500 text-white shadow-lg shadow-brand-500/20{% else %}bg-white border border-slate-200 text-slate-600 hover:bg-slate-100{% endif %}">
+                            {{ cat }}
+                        </a>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Filtered Grid View -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+                        {% for book in books %}
+                        <a href="?category={{ active_category }}&q={{ search_query }}&details_id={{ book.id }}" class="group bg-white p-4 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition duration-200">
+                            <div class="w-full aspect-[3/4] bg-gradient-to-br {{ book.color }} rounded-xl flex items-center justify-center p-3 shadow-inner relative overflow-hidden mb-3">
+                                <span class="absolute top-2 right-2 bg-black/40 backdrop-blur-md text-[10px] text-yellow-400 font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                                    <i class="fa-solid fa-star"></i> {{ book.rating }}
+                                </span>
+                                <img src="{{ book.cover_url }}" alt="{{ book.title }}" class="h-32 object-cover rounded shadow group-hover:scale-105 transition duration-300">
+                            </div>
+                            <h3 class="font-bold text-slate-900 text-xs line-clamp-1">{{ book.title }}</h3>
+                            <p class="text-[10px] text-slate-500 mt-1">{{ book.author }}</p>
+                        </a>
+                        {% empty %}
+                        <div class="col-span-full py-12 flex flex-col items-center justify-center text-slate-400">
+                            <i class="fa-solid fa-book-open text-4xl mb-3"></i>
+                            <p class="text-sm font-medium">No books match your criteria.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Details Panel (Interactive) -->
+            {% if selected_book %}
+            <aside class="w-full md:w-80 bg-[#0e1d3e] text-white flex flex-col justify-between shrink-0 border-l border-slate-800">
+                <div class="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-6">
+                    
+                    <!-- Cover Artwork View -->
+                    <div class="flex flex-col items-center">
+                        <div class="w-44 aspect-[3/4] bg-gradient-to-br {{ selected_book.color }} rounded-2xl p-6 shadow-2xl flex items-center justify-center relative overflow-hidden mb-6">
+                            <img src="{{ selected_book.cover_url }}" alt="{{ selected_book.title }}" class="h-full object-cover rounded-md shadow-2xl">
+                        </div>
+                        <h2 class="text-lg font-bold text-center line-clamp-1">{{ selected_book.title }}</h2>
+                        <p class="text-sm text-slate-400 mt-1 text-center">{{ selected_book.author }}</p>
+                    </div>
+
+                    <!-- Metrics Indicators -->
+                    <div class="grid grid-cols-3 gap-3 text-center border-t border-b border-slate-800 py-4">
+                        <div>
+                            <p class="text-xs text-slate-400">Pages</p>
+                            <p class="text-sm font-bold text-white mt-1">{{ selected_book.pages }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400">Rating</p>
+                            <p class="text-sm font-bold text-yellow-400 mt-1 flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-star"></i> {{ selected_book.rating }}
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400">Reviews</p>
+                            <p class="text-sm font-bold text-white mt-1">{{ selected_book.reviews_count }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Book Bio -->
+                    <div class="space-y-2">
+                        <h4 class="text-xs uppercase tracking-wider font-semibold text-slate-400">Description</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">{{ selected_book.description }}</p>
+                    </div>
+
+                </div>
+
+                <!-- Call to Actions -->
+                <div class="p-6 border-t border-slate-800 bg-[#0a152e]">
+                    <button class="w-full bg-brand-500 hover:bg-brand-600 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-brand-500/20 transition flex items-center justify-center gap-2 text-sm">
+                        <i class="fa-solid fa-book-open-reader"></i>
+                        <span>Read Now</span>
+                    </button>
+                </div>
+            </aside>
+            {% endif %}
+
+        </main>
+    </div>
+
+    <!-- Mobile Drawer Overlay and Logic Scripts -->
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+
+        if(mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                sidebar.classList.toggle('-translate-x-full');
+            });
+        }
+
+        // Close sidebar on outer tap
+        document.addEventListener('click', (e) => {
+            if (!sidebar.contains(e.target) && e.target !== mobileMenuBtn) {
+                sidebar.classList.add('-translate-x-full');
+            }
+        });
+    </script>
 </body>
 </html>

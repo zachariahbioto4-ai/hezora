@@ -1,23 +1,37 @@
 from django.contrib import admin
-from .models import Book, Genre, Author, BookFile
+from .models import Book, BookFile
 
-@admin.register(Genre)
-class GenreAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug']
-    search_fields = ['name']
-
-@admin.register(Author)
-class AuthorAdmin(admin.ModelAdmin):
-    list_display = ['name']
-    search_fields = ['name']
+class BookFileInline(admin.TabularInline):
+    model = BookFile
+    extra = 1
+    verbose_name = "Downloadable File Format"
+    verbose_name_plural = "Downloadable File Formats"
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ['title', 'price', 'is_published', 'is_featured', 'created_at']
-    list_filter = ['is_published', 'is_featured', 'created_at']
-    search_fields = ['title', 'isbn']
-
-@admin.register(BookFile)
-class BookFileAdmin(admin.ModelAdmin):
-    list_display = ['book', 'format', 'file_size_mb', 'created_at']
-    list_filter = ['format']
+    # What you see in the overview list table
+    list_display = ('title', 'author', 'category', 'rating', 'pages', 'is_recommended')
+    list_filter = ('category', 'is_recommended', 'created_at')
+    search_fields = ('title', 'author', 'category', 'description')
+    list_editable = ('is_recommended',)
+    ordering = ('-created_at',)
+    
+    # Organize fields inside the detailed editor page into intuitive sections
+    fieldsets = (
+        ('Basic Book Details', {
+            'fields': ('title', 'author', 'category', 'description')
+        }),
+        ('Book Coverage & Assets', {
+            'fields': ('cover_url',),
+            'description': 'Provide a high-quality online URL for the book cover image'
+        }),
+        ('Statistics & Metadata', {
+            'fields': ('rating', 'pages', 'ratings_count', 'reviews_count')
+        }),
+        ('Promotion & Styling', {
+            'fields': ('is_recommended', 'color_gradient'),
+            'description': 'Tailwind CSS classes (e.g., "from-emerald-800 to-teal-900") and homepage recommendation toggle'
+        }),
+    )
+    
+    inlines = [BookFileInline]
