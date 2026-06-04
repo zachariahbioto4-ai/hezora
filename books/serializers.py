@@ -1,19 +1,13 @@
 from rest_framework import serializers
-from .models import Book, Genre, Author
+from .models import Book, BookFile
 
-class AuthorSerializer(serializers.ModelSerializer):
+class BookFileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Author
-        fields = ['id', 'name', 'bio']
-
-class GenreSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Genre
-        fields = ['id', 'name', 'slug']
+        model = BookFile
+        fields = ['id', 'file_format', 'file_url', 'file_size_mb'] if hasattr(BookFile, 'file_size_mb') else ['id', 'file_format', 'file_url']
 
 class BookSerializer(serializers.ModelSerializer):
-    authors = AuthorSerializer(many=True, read_only=True)
-    genres = GenreSerializer(many=True, read_only=True)
+    files = BookFileSerializer(many=True, read_only=True)
     class Meta:
         model = Book
-        fields = ['id', 'title', 'slug', 'isbn', 'authors', 'genres', 'synopsis', 'cover_image', 'pages', 'language', 'published_date', 'price', 'is_free', 'is_published', 'is_featured', 'created_at']
+        fields = ['id', 'title', 'author', 'cover_url', 'category', 'rating', 'pages', 'ratings_count', 'reviews_count', 'is_recommended', 'description', 'created_at']
