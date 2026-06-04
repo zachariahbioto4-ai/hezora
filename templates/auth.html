@@ -6,70 +6,108 @@
   <title>BookBase — Sign In</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', sans-serif; background: #f3f4f6; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem; }
-    .tab.active { background: white; color: #0f172a; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
-    input:focus { border-color: #2563eb !important; box-shadow: 0 0 0 3px rgba(37,99,235,0.08); outline: none; }
-    .form-section { display: none; }
-    .form-section.active { display: block; }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',sans-serif;background:#f3f4f6;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem;}
+    .tab.active{background:white;color:#0f172a;box-shadow:0 1px 4px rgba(0,0,0,0.08);}
+    .field input{width:100%;padding:11px 14px;border:1px solid #e2e8f0;border-radius:10px;font-size:14px;color:#0f172a;outline:none;}
+    .field input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,0.08);}
+    .form-section{display:none;}
+    .form-section.active{display:block;}
+    .btn-primary{width:100%;padding:13px;background:#2563eb;color:white;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;}
+    .btn-primary:hover{background:#1d4ed8;}
   </style>
 </head>
 <body>
-  <div style="display:flex; width:100%; max-width:1000px; min-height:560px; border-radius:24px; overflow:hidden; background:white; box-shadow:0 20px 60px rgba(0,0,0,0.1);">
-    <div style="flex:1; background:#0f172a; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:3rem 2rem; color:white; text-align:center;">
-      <div style="display:flex; align-items:center; gap:10px; margin-bottom:3rem;">
-        <div style="width:36px; height:36px; background:#2563eb; border-radius:10px; display:flex; align-items:center; justify-content:center;">
+  <div style="display:flex;width:100%;max-width:1000px;min-height:560px;border-radius:24px;overflow:hidden;background:white;box-shadow:0 20px 60px rgba(0,0,0,0.1);">
+    <div style="flex:1;background:#0f172a;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 2rem;color:white;text-align:center;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:3rem;">
+        <div style="width:36px;height:36px;background:#2563eb;border-radius:10px;display:flex;align-items:center;justify-content:center;">
           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
         </div>
-        <span style="font-size:22px; font-weight:700;">BookBase</span>
+        <span style="font-size:22px;font-weight:700;">BookBase</span>
       </div>
-      <div style="width:140px; border-radius:12px; overflow:hidden; box-shadow:0 20px 40px rgba(0,0,0,0.4); margin-bottom:2rem;">
-        <img src="https://m.media-amazon.com/images/I/61k7W2m4f+L._AC_UF1000,1000_QL80_.jpg" style="width:100%; display:block;">
+      <div style="width:140px;border-radius:12px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,0.4);margin-bottom:2rem;">
+        <img src="https://m.media-amazon.com/images/I/61k7W2m4f+L._AC_UF1000,1000_QL80_.jpg" style="width:100%;display:block;">
       </div>
-      <h2 style="font-size:20px; font-weight:600; margin-bottom:0.75rem; line-height:1.4;">Your next great read is waiting</h2>
-      <p style="font-size:13px; color:#94a3b8; line-height:1.7; max-width:220px;">Discover thousands of books across every genre and read anywhere.</p>
+      <h2 style="font-size:20px;font-weight:600;margin-bottom:0.75rem;">Your next great read is waiting</h2>
+      <p style="font-size:13px;color:#94a3b8;line-height:1.7;max-width:220px;">Discover thousands of books across every genre and read anywhere.</p>
     </div>
-    <div style="flex:1; display:flex; flex-direction:column; padding:3rem 2.5rem; overflow-y:auto;">
-      <div style="display:flex; background:#f1f5f9; border-radius:12px; padding:4px; margin-bottom:2.5rem;">
-        <button class="tab active" onclick="switchTab('login')" style="flex:1; padding:10px; font-size:14px; font-weight:500; border-radius:9px; cursor:pointer; border:none; background:transparent; transition:all 0.2s;">Sign in</button>
-        <button class="tab" onclick="switchTab('signup')" style="flex:1; padding:10px; font-size:14px; font-weight:500; border-radius:9px; cursor:pointer; border:none; background:transparent; color:#64748b; transition:all 0.2s;">Create account</button>
+
+    <div style="flex:1;display:flex;flex-direction:column;padding:3rem 2.5rem;overflow-y:auto;">
+      <div style="display:flex;background:#f1f5f9;border-radius:12px;padding:4px;margin-bottom:2.5rem;">
+        <button class="tab active" onclick="switchTab('login')" style="flex:1;padding:10px;font-size:14px;font-weight:500;border-radius:9px;cursor:pointer;border:none;background:transparent;">Sign in</button>
+        <button class="tab" onclick="switchTab('signup')" style="flex:1;padding:10px;font-size:14px;font-weight:500;border-radius:9px;cursor:pointer;border:none;background:transparent;color:#64748b;">Create account</button>
       </div>
+
+      {% if messages %}
+        {% for message in messages %}
+          <div style="padding:10px 14px;border-radius:10px;margin-bottom:1rem;font-size:13px;{% if message.tags == 'error' %}background:#fef2f2;color:#991b1b;border:1px solid #fecaca;{% else %}background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+
       <div class="form-section active" id="login">
-        <h2 style="font-size:22px; font-weight:700; color:#0f172a; margin-bottom:0.4rem;">Welcome back</h2>
-        <p style="font-size:13px; color:#64748b; margin-bottom:2rem;">Sign in to continue to your library</p>
-        <div style="margin-bottom:1rem;"><label style="display:block; font-size:13px; font-weight:500; color:#374151; margin-bottom:6px;">Email address</label><input type="email" placeholder="you@example.com" style="width:100%; padding:11px 14px; border:1px solid #e2e8f0; border-radius:10px; font-size:14px;"></div>
-        <div style="margin-bottom:0.5rem;"><label style="display:block; font-size:13px; font-weight:500; color:#374151; margin-bottom:6px;">Password</label><input type="password" placeholder="••••••••" style="width:100%; padding:11px 14px; border:1px solid #e2e8f0; border-radius:10px; font-size:14px;"></div>
-        <div style="text-align:right; margin-bottom:1.25rem;"><a href="#" style="font-size:12px; color:#2563eb; text-decoration:none;">Forgot password?</a></div>
-        <button style="width:100%; padding:13px; background:#2563eb; color:white; border:none; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer;">Sign in</button>
-        <div style="display:flex; align-items:center; gap:12px; margin:1.5rem 0;"><div style="flex:1; height:1px; background:#e2e8f0;"></div><span style="font-size:12px; color:#94a3b8;">or continue with</span><div style="flex:1; height:1px; background:#e2e8f0;"></div></div>
-        <button style="width:100%; padding:11px; border:1px solid #e2e8f0; border-radius:12px; font-size:13px; font-weight:500; color:#374151; background:white; cursor:pointer;">Continue with Google</button>
-        <p style="text-align:center; margin-top:1.5rem; font-size:13px; color:#64748b;">Don't have an account? <a onclick="switchTab('signup')" style="color:#2563eb; cursor:pointer; font-weight:500;">Sign up</a></p>
+        <h2 style="font-size:22px;font-weight:700;color:#0f172a;margin-bottom:0.4rem;">Welcome back</h2>
+        <p style="font-size:13px;color:#64748b;margin-bottom:2rem;">Sign in to continue to your library</p>
+        <form method="POST" action="/accounts/login/">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="/">
+          <div class="field" style="margin-bottom:1rem;">
+            <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:6px;">Email or Username</label>
+            <input type="text" name="login" placeholder="you@example.com" required>
+          </div>
+          <div class="field" style="margin-bottom:0.5rem;">
+            <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:6px;">Password</label>
+            <input type="password" name="password" placeholder="••••••••" required>
+          </div>
+          <div style="text-align:right;margin-bottom:1.25rem;"><a href="/accounts/password/reset/" style="font-size:12px;color:#2563eb;text-decoration:none;">Forgot password?</a></div>
+          <button type="submit" class="btn-primary">Sign in</button>
+        </form>
+        <p style="text-align:center;margin-top:1.5rem;font-size:13px;color:#64748b;">Don't have an account? <a onclick="switchTab('signup')" style="color:#2563eb;cursor:pointer;font-weight:500;">Sign up</a></p>
       </div>
+
       <div class="form-section" id="signup">
-        <h2 style="font-size:22px; font-weight:700; color:#0f172a; margin-bottom:0.4rem;">Create your account</h2>
-        <p style="font-size:13px; color:#64748b; margin-bottom:2rem;">Join BookBase and start reading today</p>
-        <div style="display:flex; gap:12px; margin-bottom:1rem;">
-          <div style="flex:1;"><label style="display:block; font-size:13px; font-weight:500; color:#374151; margin-bottom:6px;">First name</label><input type="text" placeholder="John" style="width:100%; padding:11px 14px; border:1px solid #e2e8f0; border-radius:10px; font-size:14px;"></div>
-          <div style="flex:1;"><label style="display:block; font-size:13px; font-weight:500; color:#374151; margin-bottom:6px;">Last name</label><input type="text" placeholder="Doe" style="width:100%; padding:11px 14px; border:1px solid #e2e8f0; border-radius:10px; font-size:14px;"></div>
-        </div>
-        <div style="margin-bottom:1rem;"><label style="display:block; font-size:13px; font-weight:500; color:#374151; margin-bottom:6px;">Email address</label><input type="email" placeholder="you@example.com" style="width:100%; padding:11px 14px; border:1px solid #e2e8f0; border-radius:10px; font-size:14px;"></div>
-        <div style="margin-bottom:1rem;"><label style="display:block; font-size:13px; font-weight:500; color:#374151; margin-bottom:6px;">Username</label><input type="text" placeholder="johndoe" style="width:100%; padding:11px 14px; border:1px solid #e2e8f0; border-radius:10px; font-size:14px;"></div>
-        <div style="margin-bottom:1.25rem;"><label style="display:block; font-size:13px; font-weight:500; color:#374151; margin-bottom:6px;">Password</label><input type="password" placeholder="Min. 8 characters" style="width:100%; padding:11px 14px; border:1px solid #e2e8f0; border-radius:10px; font-size:14px;"></div>
-        <button style="width:100%; padding:13px; background:#2563eb; color:white; border:none; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer;">Create account</button>
-        <p style="font-size:11px; color:#94a3b8; text-align:center; margin-top:1rem; line-height:1.6;">By signing up, you agree to our <a href="#" style="color:#2563eb; text-decoration:none;">Terms</a> and <a href="#" style="color:#2563eb; text-decoration:none;">Privacy Policy</a></p>
-        <p style="text-align:center; margin-top:1rem; font-size:13px; color:#64748b;">Already have an account? <a onclick="switchTab('login')" style="color:#2563eb; cursor:pointer; font-weight:500;">Sign in</a></p>
+        <h2 style="font-size:22px;font-weight:700;color:#0f172a;margin-bottom:0.4rem;">Create your account</h2>
+        <p style="font-size:13px;color:#64748b;margin-bottom:2rem;">Join BookBase and start reading today</p>
+        <form method="POST" action="/accounts/signup/">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="/">
+          <div style="display:flex;gap:12px;margin-bottom:1rem;">
+            <div class="field" style="flex:1;">
+              <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:6px;">Username</label>
+              <input type="text" name="username" placeholder="johndoe" required>
+            </div>
+          </div>
+          <div class="field" style="margin-bottom:1rem;">
+            <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:6px;">Email address</label>
+            <input type="email" name="email" placeholder="you@example.com" required>
+          </div>
+          <div class="field" style="margin-bottom:1rem;">
+            <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:6px;">Password</label>
+            <input type="password" name="password1" placeholder="Min. 8 characters" required>
+          </div>
+          <div class="field" style="margin-bottom:1.25rem;">
+            <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:6px;">Confirm Password</label>
+            <input type="password" name="password2" placeholder="Repeat password" required>
+          </div>
+          <button type="submit" class="btn-primary">Create account</button>
+          <p style="font-size:11px;color:#94a3b8;text-align:center;margin-top:1rem;line-height:1.6;">By signing up you agree to our <a href="#" style="color:#2563eb;">Terms</a> and <a href="#" style="color:#2563eb;">Privacy Policy</a></p>
+        </form>
+        <p style="text-align:center;margin-top:1rem;font-size:13px;color:#64748b;">Already have an account? <a onclick="switchTab('login')" style="color:#2563eb;cursor:pointer;font-weight:500;">Sign in</a></p>
       </div>
     </div>
   </div>
   <script>
     function switchTab(tab) {
-      document.querySelectorAll('.tab').forEach((t, i) => {
-        t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='signup'));
-        t.style.color = t.classList.contains('active') ? '#0f172a' : '#64748b';
+      document.querySelectorAll('.tab').forEach((t,i) => {
+        t.classList.toggle('active',(i===0&&tab==='login')||(i===1&&tab==='signup'));
+        t.style.color=t.classList.contains('active')?'#0f172a':'#64748b';
       });
-      document.getElementById('login').classList.toggle('active', tab==='login');
-      document.getElementById('signup').classList.toggle('active', tab==='signup');
+      document.getElementById('login').classList.toggle('active',tab==='login');
+      document.getElementById('signup').classList.toggle('active',tab==='signup');
     }
+    {% if request.GET.next == '/signup/' %}switchTab('signup');{% endif %}
   </script>
 </body>
 </html>
