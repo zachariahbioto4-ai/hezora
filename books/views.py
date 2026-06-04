@@ -1,21 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from .models import Book
 
 def dashboard_view(request):
-    """
-    Renders the live BookBase Dashboard UI populated solely by your Django Admin inputs.
-    """
-    # 1. Fetch your real database records
     books_qs = Book.objects.all()
     books = []
-    
     for b in books_qs:
         books.append({
             "id": b.id,
             "title": b.title,
             "author": b.author or "Unknown Author",
-            "cover_url": b.cover_url or "[https://via.placeholder.com/150](https://via.placeholder.com/150)",
+            "cover_url": b.cover_url or "https://via.placeholder.com/150",
             "category": b.category or "General",
             "rating": str(b.rating),
             "pages": b.pages,
@@ -26,25 +21,19 @@ def dashboard_view(request):
             "description": b.description or ""
         })
 
-    # 2. Extract unique categories for your filter bar
     categories = sorted(list(set(b["category"] for b in books))) if books else []
-    
-    # 3. Handle dashboard filtering options
     active_category = request.GET.get('category', 'All')
     search_query = request.GET.get('q', '')
 
     filtered_books = books
     if active_category != 'All':
         filtered_books = [b for b in filtered_books if b["category"].lower() == active_category.lower()]
-    
     if search_query:
         filtered_books = [b for b in filtered_books if search_query.lower() in b["title"].lower() or search_query.lower() in b["author"].lower()]
 
     recommended_books = [b for b in books if b["recommended"]]
-    
-    # Select book detail highlight
+
     selected_book = filtered_books[0] if filtered_books else (books[0] if books else None)
-    
     selected_id = request.GET.get('details_id')
     if selected_id:
         try:
@@ -64,9 +53,31 @@ def dashboard_view(request):
     }
     return render(request, "dashboard.html", context)
 
+
+def book_detail_view(request, book_id=None):
+    if book_id:
+        book = get_object_or_404(Book, id=book_id)
+    else:
+        book = Book.objects.first()
+    return render(request, 'book_detail.html', {'book': book})
+
+
+def library_view(request):
+    from library.models import LibraryEntry
+    entries = []
+    if request.user.is_authenticated:
+        entries = LibraryEntry.objects.filter(user=request.user).select_related('book')
+    return render(request, 'library.html', {'entries': entries})
+
+
+def orders_view(request):
+    from orders.models import Order
+    orders = []
+    if request.user.is_authenticated:
+        orders = Order.objects.filter(user=request.user).prefetch_related('items__book')
+    return render(request, 'orders.html', {'orders': orders})
+
+
 def api_books(request):
-    """
-    Serves dynamic database book items as JSON.
-    """
     books_qs = Book.objects.all().values()
     return JsonResponse({"books": list(books_qs)})
