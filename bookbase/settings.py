@@ -162,3 +162,18 @@ cloudinary.config(
     api_secret='YOUR_API_SECRET',
     secure=True
 )
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.onrender.com',
+    'https://*.githubpreview.dev',
+    'https://*.app.github.dev',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'https://localhost:8000',
+    'https://127.0.0.1:8000',
+]
+
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False
+# Add your specific Codespace URL if needed
+# 'https://YOUR-CODESPACE-NAME.app.github.dev',
