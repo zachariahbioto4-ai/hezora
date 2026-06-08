@@ -81,3 +81,19 @@ def orders_view(request):
 def api_books(request):
     books_qs = Book.objects.all().values()
     return JsonResponse({"books": list(books_qs)})
+
+
+from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def download_book(request, file_id):
+    """Secure download — only logged in users can download"""
+    from .models import BookFile
+    book_file = BookFile.objects.filter(id=file_id).first()
+    if not book_file:
+        return HttpResponseForbidden("File not found.")
+    url = book_file.get_download_url()
+    if not url:
+        return HttpResponseForbidden("No file available.")
+    return HttpResponseRedirect(url)
