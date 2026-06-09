@@ -10,7 +10,7 @@ def dashboard_view(request):
             "id": b.id,
             "title": b.title,
             "author": b.author or "Unknown Author",
-            "cover_url": b.cover_url or "https://via.placeholder.com/150",
+            "cover_url": b.get_cover(),
             "category": b.category or "General",
             "rating": str(b.rating),
             "pages": b.pages,
@@ -72,10 +72,27 @@ def library_view(request):
 
 def orders_view(request):
     from orders.models import Order
+    from django.db.models import Sum
+
     orders = []
+    total_count = delivered_count = processing_count = 0
+    total_spent = '0.00'
+
     if request.user.is_authenticated:
-        orders = Order.objects.filter(user=request.user).prefetch_related('items__book')
-    return render(request, 'orders.html', {'orders': orders})
+        orders = Order.objects.filter(user=request.user).prefetch_related('items__book').order_by('-created_at')
+        total_count      = orders.count()
+        delivered_count  = orders.filter(status='delivered').count()
+        processing_count = orders.filter(status__in=['pending','confirmed','shipped']).count()
+        spent = orders.exclude(status='cancelled').aggregate(t=Sum('total_amount'))['t']
+        total_spent = f"{spent:.2f}" if spent else '0.00'
+
+    return render(request, 'orders.html', {
+        'orders': orders,
+        'total_count': total_count,
+        'delivered_count': delivered_count,
+        'processing_count': processing_count,
+        'total_spent': total_spent,
+    })
 
 
 def api_books(request):
@@ -97,3 +114,55 @@ def download_book(request, file_id):
     if not url:
         return HttpResponseForbidden("No file available.")
     return HttpResponseRedirect(url)
+
+
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+from django.contrib import messages
+import uuid
+
+@require_POST
+@login_required
+def place_order(request):
+    from orders.models import Order, OrderItem
+    from library.models import LibraryEntry
+
+    book_id = request.POST.get('book_id')
+    if not book_id:
+        messages.error(request, 'No book selected.')
+        return redirect('/checkout/')
+
+    book = get_object_or_404(Book, id=book_id)
+
+    first_name = request.POST.get('first_name', '').strip()
+    last_name  = request.POST.get('last_name', '').strip()
+    address    = request.POST.get('address', '').strip()
+    city       = request.POST.get('city', '').strip()
+    state      = request.POST.get('state', '').strip()
+    zip_code   = request.POST.get('zip', '').strip()
+
+    if not all([first_name, last_name, address, city, state, zip_code]):
+        messages.error(request, 'Please fill in all shipping fields.')
+        return redirect(f'/checkout/?book_id={book_id}')
+
+    shipping_address = f"{first_name} {last_name}, {address}, {city}, {state} {zip_code}"
+
+    order = Order.objects.create(
+        user=request.user,
+        order_number=f"BB-{uuid.uuid4().hex[:8].upper()}",
+        status='confirmed',
+        total_amount=14.99,
+        shipping_address=shipping_address,
+    )
+
+    OrderItem.objects.create(
+        order=order,
+        book=book,
+        quantity=1,
+        price=14.99,
+    )
+
+    LibraryEntry.objects.get_or_create(user=request.user, book=book)
+
+    messages.success(request, f'Order {order.order_number} placed! Your book has been added to your library.')
+    return redirect('/library/')

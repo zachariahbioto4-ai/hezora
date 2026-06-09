@@ -8,12 +8,11 @@
 {% block page_subtitle %}Track and manage your dashboard purchases securely{% endblock %}
 
 {% block header_actions %}
-<!-- Order Search Input Box -->
 <div class="relative hidden sm:block w-64">
     <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
         <i class="fa-solid fa-magnifying-glass text-xs"></i>
     </span>
-    <input type="text" id="orderSearchInput" onkeyup="searchOrders()" placeholder="Search order ID or title..." 
+    <input type="text" id="orderSearchInput" onkeyup="searchOrders()" placeholder="Search order ID or title..."
         class="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-50 border border-slate-200/80 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none transition duration-150 text-xs text-slate-800 shadow-inner">
 </div>
 {% endblock %}
@@ -21,215 +20,183 @@
 {% block content %}
 <div class="space-y-6">
 
-    <!-- Performance/Spend Metric Cards -->
+    <!-- Metric Cards -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        
-        <!-- Metric Item -->
         <div class="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex items-center justify-between">
             <div>
                 <p class="text-[10px] text-slate-400 uppercase tracking-wider font-extrabold">Total Orders</p>
-                <h3 class="text-2xl font-black text-slate-900 mt-1">8</h3>
+                <h3 class="text-2xl font-black text-slate-900 mt-1">{{ total_count }}</h3>
             </div>
             <div class="w-10 h-10 rounded-xl bg-slate-50 text-slate-500 flex items-center justify-center text-sm shadow-inner">
                 <i class="fa-solid fa-boxes-stacked"></i>
             </div>
         </div>
-
-        <!-- Metric Item -->
         <div class="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex items-center justify-between">
             <div>
                 <p class="text-[10px] text-slate-400 uppercase tracking-wider font-extrabold">Delivered</p>
-                <h3 class="text-2xl font-black text-emerald-600 mt-1">5</h3>
+                <h3 class="text-2xl font-black text-emerald-600 mt-1">{{ delivered_count }}</h3>
             </div>
             <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center text-sm shadow-inner">
                 <i class="fa-solid fa-circle-check"></i>
             </div>
         </div>
-
-        <!-- Metric Item -->
         <div class="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex items-center justify-between">
             <div>
                 <p class="text-[10px] text-slate-400 uppercase tracking-wider font-extrabold">Processing</p>
-                <h3 class="text-2xl font-black text-brand-600 mt-1">2</h3>
+                <h3 class="text-2xl font-black text-brand-600 mt-1">{{ processing_count }}</h3>
             </div>
             <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-500 flex items-center justify-center text-sm shadow-inner">
                 <i class="fa-solid fa-circle-notch animate-spin"></i>
             </div>
         </div>
-
-        <!-- Metric Item -->
         <div class="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex items-center justify-between">
             <div>
                 <p class="text-[10px] text-slate-400 uppercase tracking-wider font-extrabold">Total Spent</p>
-                <h3 class="text-2xl font-black text-slate-900 mt-1">$94.92</h3>
+                <h3 class="text-2xl font-black text-slate-900 mt-1">${{ total_spent }}</h3>
             </div>
             <div class="w-10 h-10 rounded-xl bg-slate-50 text-slate-500 flex items-center justify-center text-sm shadow-inner">
                 <i class="fa-solid fa-wallet"></i>
             </div>
         </div>
-
     </div>
 
-    <!-- Filter Control Toggle Pills -->
+    <!-- Filter Pills -->
     <div class="flex items-center gap-2 overflow-x-auto pb-1.5 custom-scrollbar">
-        <button onclick="setFilter(this, 'all')" class="filter-pill px-4.5 py-2 rounded-full text-xs font-bold transition whitespace-nowrap bg-brand-500 text-white shadow-md shadow-brand-500/10">
+        <button onclick="setFilter(this, 'all')" class="filter-pill px-4 py-2 rounded-full text-xs font-bold transition whitespace-nowrap bg-brand-500 text-white shadow-md shadow-brand-500/10">
             All Orders
         </button>
-        <button onclick="setFilter(this, 'processing')" class="filter-pill px-4.5 py-2 rounded-full text-xs font-bold transition whitespace-nowrap bg-white border border-slate-200 text-slate-600 hover:bg-slate-50">
-            Processing
+        <button onclick="setFilter(this, 'confirmed')" class="filter-pill px-4 py-2 rounded-full text-xs font-bold transition whitespace-nowrap bg-white border border-slate-200 text-slate-600 hover:bg-slate-50">
+            Confirmed
         </button>
-        <button onclick="setFilter(this, 'delivered')" class="filter-pill px-4.5 py-2 rounded-full text-xs font-bold transition whitespace-nowrap bg-white border border-slate-200 text-slate-600 hover:bg-slate-50">
+        <button onclick="setFilter(this, 'pending')" class="filter-pill px-4 py-2 rounded-full text-xs font-bold transition whitespace-nowrap bg-white border border-slate-200 text-slate-600 hover:bg-slate-50">
+            Pending
+        </button>
+        <button onclick="setFilter(this, 'delivered')" class="filter-pill px-4 py-2 rounded-full text-xs font-bold transition whitespace-nowrap bg-white border border-slate-200 text-slate-600 hover:bg-slate-50">
             Delivered
         </button>
-        <button onclick="setFilter(this, 'cancelled')" class="filter-pill px-4.5 py-2 rounded-full text-xs font-bold transition whitespace-nowrap bg-white border border-slate-200 text-slate-600 hover:bg-slate-50">
+        <button onclick="setFilter(this, 'cancelled')" class="filter-pill px-4 py-2 rounded-full text-xs font-bold transition whitespace-nowrap bg-white border border-slate-200 text-slate-600 hover:bg-slate-50">
             Cancelled
         </button>
     </div>
 
-    <!-- Active Orders Dynamic Grid/Rows -->
+    <!-- Unauthenticated -->
+    {% if not user.is_authenticated %}
+    <div class="max-w-md mx-auto my-12 text-center bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm">
+        <div class="w-16 h-16 bg-brand-50 text-brand-500 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl shadow-inner">
+            <i class="fa-solid fa-lock"></i>
+        </div>
+        <h3 class="text-lg font-extrabold text-slate-900">Sign In Required</h3>
+        <p class="text-xs text-slate-500 mt-2 leading-relaxed">Please sign in to view your order history.</p>
+        <a href="/auth/" class="inline-flex items-center gap-2 mt-6 bg-brand-500 hover:bg-brand-600 text-white font-bold py-3 px-6 rounded-xl shadow-md text-xs transition">
+            <i class="fa-solid fa-right-to-bracket"></i> Sign In
+        </a>
+    </div>
+
+    <!-- No orders -->
+    {% elif not orders %}
+    <div class="max-w-md mx-auto my-12 text-center bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm">
+        <div class="w-16 h-16 bg-slate-50 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl shadow-inner">
+            <i class="fa-solid fa-receipt"></i>
+        </div>
+        <h3 class="text-lg font-extrabold text-slate-900">No Orders Yet</h3>
+        <p class="text-xs text-slate-500 mt-2 leading-relaxed">You haven't placed any orders yet. Discover a book and make your first purchase!</p>
+        <a href="/" class="inline-flex items-center gap-2 mt-6 bg-brand-500 hover:bg-brand-600 text-white font-bold py-3 px-6 rounded-xl shadow-md text-xs transition">
+            <i class="fa-solid fa-compass"></i> Discover Books
+        </a>
+    </div>
+
+    <!-- Real orders -->
+    {% else %}
     <div class="space-y-3.5" id="ordersContainer">
+        {% for order in orders %}
 
-        <!-- Order Card Row -->
-        <div class="order-card-row group bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-md hover:border-slate-300/80 transition duration-200 flex flex-col sm:flex-row sm:items-center gap-4" data-status="delivered">
+        {% with first_item=order.items.first %}
+        <div class="order-card-row group bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-md hover:border-slate-300/80 transition duration-200 flex flex-col sm:flex-row sm:items-center gap-4"
+             data-status="{{ order.status }}">
+
             <div class="flex items-start gap-4 flex-1">
-                <!-- Book cover layout mockup -->
+                <!-- Cover -->
                 <div class="w-14 aspect-[3/4] bg-gradient-to-br from-slate-100 to-slate-200 rounded-xl p-1.5 shadow-inner relative overflow-hidden shrink-0">
                     <div class="absolute inset-y-0 left-0 w-1 bg-black/10"></div>
-                    <img src="https://m.media-amazon.com/images/I/61k7W2m4f+L._AC_UF1000,1000_QL80_.jpg" alt="Book Cover" class="w-full h-full object-cover rounded shadow-sm">
+                    {% if first_item %}
+                    <img src="{{ first_item.book.cover_url }}" alt="{{ first_item.book.title }}"
+                         class="w-full h-full object-cover rounded shadow-sm">
+                    {% else %}
+                    <div class="w-full h-full flex items-center justify-center text-slate-300">
+                        <i class="fa-solid fa-book text-xl"></i>
+                    </div>
+                    {% endif %}
                 </div>
-                
+
                 <div class="flex-1 min-w-0">
                     <div class="flex flex-wrap items-center gap-2 mb-1">
-                        <h4 class="font-bold text-slate-900 text-sm leading-tight truncate order-title">Company of One</h4>
-                        <span class="inline-block bg-emerald-50 text-emerald-700 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-100">
-                            Delivered
-                        </span>
+                        <h4 class="font-bold text-slate-900 text-sm leading-tight truncate order-title">
+                            {% if first_item %}{{ first_item.book.title }}{% else %}Order {{ order.order_number }}{% endif %}
+                            {% if order.items.count > 1 %}
+                            <span class="text-[10px] text-slate-400 font-medium">+{{ order.items.count|add:"-1" }} more</span>
+                            {% endif %}
+                        </h4>
+
+                        <!-- Status badge -->
+                        {% if order.status == 'delivered' %}
+                        <span class="inline-block bg-emerald-50 text-emerald-700 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-100">Delivered</span>
+                        {% elif order.status == 'confirmed' %}
+                        <span class="inline-block bg-blue-50 text-blue-700 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-blue-100">Confirmed</span>
+                        {% elif order.status == 'pending' %}
+                        <span class="inline-block bg-amber-50 text-amber-700 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-amber-100">Pending</span>
+                        {% elif order.status == 'shipped' %}
+                        <span class="inline-block bg-purple-50 text-purple-700 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-purple-100">Shipped</span>
+                        {% elif order.status == 'cancelled' %}
+                        <span class="inline-block bg-rose-50 text-rose-700 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-rose-100">Cancelled</span>
+                        {% endif %}
                     </div>
-                    <p class="text-xs text-slate-400 line-clamp-1 mb-2">Paul Jarvis &middot; PDF Format &middot; <span class="font-semibold text-slate-600 order-id">#BB-20241</span></p>
-                    
+
+                    <p class="text-xs text-slate-400 line-clamp-1 mb-2">
+                        {% if first_item %}{{ first_item.book.author }} &middot; {% endif %}
+                        <span class="font-semibold text-slate-600 order-id">#{{ order.order_number }}</span>
+                    </p>
+
                     <div class="flex items-center gap-3 text-xs text-slate-500 font-medium">
-                        <span>Ordered: <strong class="text-slate-700">12 May 2024</strong></span>
+                        <span>Ordered: <strong class="text-slate-700">{{ order.created_at|date:"d M Y" }}</strong></span>
                         <span class="text-slate-300">&bull;</span>
-                        <span class="text-slate-900 font-black">$12.99</span>
+                        <span class="text-slate-900 font-black">${{ order.total_amount }}</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Side Action Button -->
+            <!-- Action -->
             <div class="flex sm:justify-end shrink-0 pt-3 sm:pt-0 border-t sm:border-0 border-slate-100">
-                <a href="/book/1/" class="w-full sm:w-auto bg-slate-50 hover:bg-brand-50 border border-slate-200 hover:border-brand-200 text-slate-700 hover:text-brand-600 font-bold py-2 px-5 rounded-xl transition duration-150 text-xs text-center flex items-center justify-center gap-1.5 shadow-sm">
-                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-                    <span>Read Book</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- Order Card Row -->
-        <div class="order-card-row group bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-md hover:border-slate-300/80 transition duration-200 flex flex-col sm:flex-row sm:items-center gap-4" data-status="delivered">
-            <div class="flex items-start gap-4 flex-1">
-                <div class="w-14 aspect-[3/4] bg-gradient-to-br from-slate-100 to-slate-200 rounded-xl p-1.5 shadow-inner relative overflow-hidden shrink-0">
-                    <div class="absolute inset-y-0 left-0 w-1 bg-black/10"></div>
-                    <img src="https://m.media-amazon.com/images/I/71TRUbzcvaL._AC_UF1000,1000_QL80_.jpg" alt="Book Cover" class="w-full h-full object-cover rounded shadow-sm">
-                </div>
-                
-                <div class="flex-1 min-w-0">
-                    <div class="flex flex-wrap items-center gap-2 mb-1">
-                        <h4 class="font-bold text-slate-900 text-sm leading-tight truncate order-title">Psychology of Money</h4>
-                        <span class="inline-block bg-emerald-50 text-emerald-700 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-100">
-                            Delivered
-                        </span>
-                    </div>
-                    <p class="text-xs text-slate-400 line-clamp-1 mb-2">Morgan Housel &middot; EPUB Format &middot; <span class="font-semibold text-slate-600 order-id">#BB-20235</span></p>
-                    
-                    <div class="flex items-center gap-3 text-xs text-slate-500 font-medium">
-                        <span>Ordered: <strong class="text-slate-700">3 Apr 2024</strong></span>
-                        <span class="text-slate-300">&bull;</span>
-                        <span class="text-slate-900 font-black">$14.99</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex sm:justify-end shrink-0 pt-3 sm:pt-0 border-t sm:border-0 border-slate-100">
-                <a href="/book/2/" class="w-full sm:w-auto bg-slate-50 hover:bg-brand-50 border border-slate-200 hover:border-brand-200 text-slate-700 hover:text-brand-600 font-bold py-2 px-5 rounded-xl transition duration-150 text-xs text-center flex items-center justify-center gap-1.5 shadow-sm">
-                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-                    <span>Read Book</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- Order Card Row -->
-        <div class="order-card-row group bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-md hover:border-slate-300/80 transition duration-200 flex flex-col sm:flex-row sm:items-center gap-4" data-status="processing">
-            <div class="flex items-start gap-4 flex-1">
-                <div class="w-14 aspect-[3/4] bg-gradient-to-br from-slate-100 to-slate-200 rounded-xl p-1.5 shadow-inner relative overflow-hidden shrink-0">
-                    <div class="absolute inset-y-0 left-0 w-1 bg-black/10"></div>
-                    <img src="https://m.media-amazon.com/images/I/71YyN7kZ1fL._AC_UF1000,1000_QL80_.jpg" alt="Book Cover" class="w-full h-full object-cover rounded shadow-sm">
-                </div>
-                
-                <div class="flex-1 min-w-0">
-                    <div class="flex flex-wrap items-center gap-2 mb-1">
-                        <h4 class="font-bold text-slate-900 text-sm leading-tight truncate order-title">How Innovation Works</h4>
-                        <span class="inline-block bg-blue-50 text-blue-700 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-blue-100">
-                            Processing
-                        </span>
-                    </div>
-                    <p class="text-xs text-slate-400 line-clamp-1 mb-2">Matt Ridley &middot; PDF Format &middot; <span class="font-semibold text-slate-600 order-id">#BB-20289</span></p>
-                    
-                    <div class="flex items-center gap-3 text-xs text-slate-500 font-medium">
-                        <span>Ordered: <strong class="text-slate-700">1 Jun 2024</strong></span>
-                        <span class="text-slate-300">&bull;</span>
-                        <span class="text-slate-900 font-black">$11.99</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex sm:justify-end shrink-0 pt-3 sm:pt-0 border-t sm:border-0 border-slate-100">
-                <a href="#" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200/80 text-slate-400 font-bold py-2 px-5 rounded-xl transition duration-150 text-xs text-center cursor-not-allowed flex items-center justify-center gap-1.5 pointer-events-none">
-                    <i class="fa-solid fa-circle-notch animate-spin text-[10px]"></i>
-                    <span>Processing</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- Order Card Row -->
-        <div class="order-card-row group bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-md hover:border-slate-300/80 transition duration-200 flex flex-col sm:flex-row sm:items-center gap-4" data-status="cancelled">
-            <div class="flex items-start gap-4 flex-1">
-                <div class="w-14 aspect-[3/4] bg-gradient-to-br from-slate-100 to-slate-200 rounded-xl p-1.5 shadow-inner relative overflow-hidden shrink-0">
-                    <div class="absolute inset-y-0 left-0 w-1 bg-black/10"></div>
-                    <img src="https://m.media-amazon.com/images/I/81xG-Y3m8sL._AC_UF1000,1000_QL80_.jpg" alt="Book Cover" class="w-full h-full object-cover rounded shadow-sm">
-                </div>
-                
-                <div class="flex-1 min-w-0">
-                    <div class="flex flex-wrap items-center gap-2 mb-1">
-                        <h4 class="font-bold text-slate-900 text-sm leading-tight truncate order-title">The Bees</h4>
-                        <span class="inline-block bg-rose-50 text-rose-700 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-rose-100">
-                            Cancelled
-                        </span>
-                    </div>
-                    <p class="text-xs text-slate-400 line-clamp-1 mb-2">Laline Paull &middot; MOBI Format &middot; <span class="font-semibold text-slate-600 order-id">#BB-20198</span></p>
-                    
-                    <div class="flex items-center gap-3 text-xs text-slate-500 font-medium">
-                        <span>Ordered: <strong class="text-slate-700">18 Mar 2024</strong></span>
-                        <span class="text-slate-300">&bull;</span>
-                        <span class="text-slate-900 font-black">$9.99</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex sm:justify-end shrink-0 pt-3 sm:pt-0 border-t sm:border-0 border-slate-100">
+                {% if order.status == 'cancelled' %}
                 <span class="w-full sm:w-auto bg-slate-50 text-slate-400 font-semibold py-2 px-5 rounded-xl text-xs text-center border border-slate-200/50">
                     Refunded
                 </span>
+                {% elif order.status == 'pending' or order.status == 'confirmed' %}
+                <span class="w-full sm:w-auto bg-slate-100 text-slate-400 font-bold py-2 px-5 rounded-xl text-xs text-center flex items-center justify-center gap-1.5 pointer-events-none">
+                    <i class="fa-solid fa-circle-notch animate-spin text-[10px]"></i> Processing
+                </span>
+                {% else %}
+                {% if first_item %}
+                <a href="/book/{{ first_item.book.id }}/"
+                   class="w-full sm:w-auto bg-slate-50 hover:bg-brand-50 border border-slate-200 hover:border-brand-200 text-slate-700 hover:text-brand-600 font-bold py-2 px-5 rounded-xl transition duration-150 text-xs text-center flex items-center justify-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> Read Book
+                </a>
+                {% endif %}
+                {% endif %}
             </div>
         </div>
+        {% endwith %}
 
+        {% endfor %}
     </div>
 
-    <!-- Empty Results Fallback -->
+    <!-- Empty filter result -->
     <div id="noResults" class="hidden py-16 flex flex-col items-center justify-center text-slate-400 text-center">
         <i class="fa-solid fa-receipt text-5xl mb-4 text-slate-300"></i>
         <h4 class="font-bold text-slate-800 text-sm mb-1">No Orders Found</h4>
         <p class="text-xs text-slate-400">Try searching for a different ID or filter criteria.</p>
     </div>
+
+    {% endif %}
 
 </div>
 {% endblock %}
@@ -238,33 +205,30 @@
 <script>
     let activeFilter = 'all';
 
-    // Filters rows based on status pill selection
     function setFilter(button, status) {
         activeFilter = status;
-
-        // Toggle selected styling on filters
         const pills = document.querySelectorAll('.filter-pill');
         pills.forEach(pill => {
-            pill.className = "filter-pill px-4.5 py-2 rounded-full text-xs font-bold transition whitespace-nowrap bg-white border border-slate-200 text-slate-600 hover:bg-slate-50";
+            pill.className = "filter-pill px-4 py-2 rounded-full text-xs font-bold transition whitespace-nowrap bg-white border border-slate-200 text-slate-600 hover:bg-slate-50";
         });
-        button.className = "filter-pill px-4.5 py-2 rounded-full text-xs font-bold transition whitespace-nowrap bg-brand-500 text-white shadow-md shadow-brand-500/10";
-
+        button.className = "filter-pill px-4 py-2 rounded-full text-xs font-bold transition whitespace-nowrap bg-brand-500 text-white shadow-md shadow-brand-500/10";
         applyFilters();
     }
 
-    // Searches rows and matches filter conditions
     function applyFilters() {
-        const searchVal = document.getElementById('orderSearchInput').value.toLowerCase();
+        const searchVal = (document.getElementById('orderSearchInput')?.value || '').toLowerCase();
         const rows = document.querySelectorAll('.order-card-row');
         let visibleCount = 0;
 
         rows.forEach(row => {
-            const status = row.getAttribute('data-status');
-            const title = row.querySelector('.order-title').innerText.toLowerCase();
-            const orderId = row.querySelector('.order-id').innerText.toLowerCase();
-            
+            const status    = row.getAttribute('data-status');
+            const titleEl   = row.querySelector('.order-title');
+            const orderIdEl = row.querySelector('.order-id');
+            const title     = titleEl ? titleEl.innerText.toLowerCase() : '';
+            const orderId   = orderIdEl ? orderIdEl.innerText.toLowerCase() : '';
+
             const matchesFilter = (activeFilter === 'all' || status === activeFilter);
-            const matchesSearch = (title.includes(searchVal) || orderId.includes(searchVal));
+            const matchesSearch = (!searchVal || title.includes(searchVal) || orderId.includes(searchVal));
 
             if (matchesFilter && matchesSearch) {
                 row.classList.remove('hidden');
@@ -274,18 +238,12 @@
             }
         });
 
-        // Toggle empty results view
         const fallback = document.getElementById('noResults');
-        if (visibleCount === 0) {
-            fallback.classList.remove('hidden');
-        } else {
-            fallback.classList.add('hidden');
+        if (fallback) {
+            fallback.classList.toggle('hidden', visibleCount > 0);
         }
     }
 
-    // Interactive keyup routing for mobile/desktop headers
-    function searchOrders() {
-        applyFilters();
-    }
+    function searchOrders() { applyFilters(); }
 </script>
 {% endblock %}

@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.conf import settings
 from django.conf.urls.static import static
+from accounts import profile_views
 
 def logout_view(request):
     logout(request)
@@ -17,6 +18,9 @@ urlpatterns = [
     path('checkout/', lambda req: render(req, 'checkout.html')),
     path('categories/', lambda req: render(req, 'categories.html')),
     path('profile/', lambda req: render(req, 'profile.html')),
+    path('profile/update_personal/', profile_views.update_personal, name='update_personal'),
+    path('profile/update_security/', profile_views.update_security, name='update_security'),
+    path('profile/update_address/',  profile_views.update_address,  name='update_address'),
     path('logout/', logout_view, name='logout'),
     path('accounts/', include('allauth.urls')),
     path('api-auth/', include('rest_framework.urls')),
