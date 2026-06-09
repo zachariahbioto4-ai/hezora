@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Purchase Confirmation</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <h2>Thank you for your purchase, {{ user.username }}!</h2>
+    <p>Your order <strong>#{{ order.order_number }}</strong> has been confirmed.</p>
+    
+    <h3>Order Summary:</h3>
+    <ul>
+    {% for item in order.items.all %}
+        <li>{{ item.book.title }} - ${{ item.book.price }}</li>
+    {% endfor %}
+    </ul>
+    <p><strong>Total: ${{ order.total_amount }}</strong></p>
+
+    {% if tokens %}
+    <h3>Your Download Links (Valid for 48 hours):</h3>
+    <ul>
+    {% for token in tokens %}
+        <li>
+            <strong>{{ token.book_title }}</strong><br>
+            <a href="{{ frontend_url }}{{ token.download_url }}">Download Now</a>
+        </li>
+    {% endfor %}
+    </ul>
+    <p><small>Links expire after 48 hours or 5 downloads.</small></p>
+    {% endif %}
+
+    <p>If you have any questions, reply to this email.</p>
+    <p>Happy Reading!<br><strong>Hezora Team</strong></p>
+</body>
+</html>

@@ -127,6 +127,8 @@ REST_FRAMEWORK = {
 
 STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY', default='')
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY', default='')
+STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET', default='')
+FRONTEND_URL = config('FRONTEND_URL', default='http://localhost:8000')
 
 CSRF_TRUSTED_ORIGINS = [
     'https://*.onrender.com',
@@ -177,3 +179,13 @@ CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = False
 # Add your specific Codespace URL if needed
 # 'https://YOUR-CODESPACE-NAME.app.github.dev',
+
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # or your provider
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@yourdomain.com')
+
