@@ -10,7 +10,8 @@ from bookbase.utils.email import send_purchase_confirmation
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 class PaymentViewSet(viewsets.ModelViewSet):
-    serializer_class = 'payments.serializers.PaymentSerializer'
+    from .serializers import PaymentSerializer
+    serializer_class = PaymentSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
